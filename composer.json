@@ -1,0 +1,9 @@
+{
+    "name": "narutorpg/narutorpg",
+    "description": "NarutoRPG",
+    "minimum-stability": "stable",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "rector/rector": "^0.18.5"
+    }
+}
