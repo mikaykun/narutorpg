@@ -12,6 +12,10 @@ indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+# Markdown-Files
+[*.md]
+max_line_length = 80
+
 # .htaccess
 [{_.htaccess,.htaccess}]
 indent_style = tab
