@@ -2,6 +2,10 @@
     "name": "narutorpg/narutorpg",
     "description": "NarutoRPG",
     "license": "GPL-2.0-or-later",
+    "support": {
+        "issues": "https://github.com/mikaykun/narutorpg/issues",
+        "source": "https://github.com/mikaykun/narutorpg"
+    },
     "require": {
         "php": ">=8.1",
         "ext-mysqli": "*",
@@ -29,8 +33,8 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
-            "symfony/runtime": true,
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         },
         "optimize-autoloader": true,
         "sort-packages": true
