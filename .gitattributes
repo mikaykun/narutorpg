@@ -1,1 +1,4 @@
 /.ddev export-ignore
+
+# Enforce checkout with linux lf consistent over all platforms
+*.php text eol=lf
