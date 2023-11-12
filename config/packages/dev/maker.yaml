@@ -1,0 +1,4 @@
+maker:
+    # tell MakerBundle that all of your classes live in an
+    # NarutoRPG namespace, instead of the default App
+    root_namespace: 'NarutoRPG'

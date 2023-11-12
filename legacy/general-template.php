@@ -5,6 +5,7 @@
  */
 function get_header(): void
 {
+    include __DIR__ . '/../Menus/layout1.inc';
 }
 
 /**
@@ -12,4 +13,5 @@ function get_header(): void
  */
 function get_footer(): void
 {
+    include __DIR__ . '/../Menus/layout2.inc';
 }

@@ -1,8 +1,5 @@
 <?php
 
-namespace classes;
-use AllowDynamicProperties;
-
 /**
  * User Data
  */
@@ -21,4 +18,5 @@ final class UserData
     public string $Linkfarbe;
     public string $admin;
     public int $CoAdmin;
+    public int $SLVerbot;
 }
