@@ -19,3 +19,6 @@ max_line_length = 80
 # .htaccess
 [{_.htaccess,.htaccess}]
 indent_style = tab
+
+[*.neon]
+indent_style = tab
