@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Run mix commands in the container
+## Usage: mix [command]
+## Example: "ddev mix watch"
+
+npx mix "$@"
