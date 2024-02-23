@@ -1,6 +1,6 @@
 <?php
 
-class Development
+final class Development
 {
     public $Id = 0;
     public $Name;

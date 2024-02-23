@@ -1,15 +1,14 @@
 <?php
 
-class LoggingTool
+final class LoggingTool
 {
-    private $logId;
     private $logInfo;
     private $user;
     private $logDate;
     private $logKat;
     private $userIP;
 
-    public function defineLogEntry($logKat, $logInfo): void
+    public function defineLogEntry(string $logKat, string $logInfo): void
     {
         $this->user = $_COOKIE["c_loged"];
         $this->logKat = $logKat;
@@ -20,8 +19,7 @@ class LoggingTool
 
     public function logUpload(): void
     {
-        $logUpload = "INSERT INTO Adminlog(Was,Wer,Wann,Bereich,IP)
-				VALUES ('$this->logInfo',$this->user,'$this->logDate','$this->logKat','$this->userIP')";
+        $logUpload = "INSERT INTO Adminlog(Was,Wer,Wann,Bereich,IP) VALUES ('$this->logInfo',$this->user,'$this->logDate','$this->logKat','$this->userIP')";
         mysql_query($logUpload);
     }
 }

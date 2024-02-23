@@ -15,8 +15,7 @@ final class trainingstage
             $Teiler -= 0.25;
         }
         $Teiler += 0.35;
-        $Wert = ($Userwert) / $Teiler;
-        return $Wert;
+        return ($Userwert) / $Teiler;
     }
 
     public function ausdauer($u_Besonderheiten, $Userwert, $Niveau): float|int
@@ -57,13 +56,13 @@ final class trainingstage
         return $Tagebekommen;
     }
 
-    private function alleGrundwerte($User, $u_Besonderheiten, $trainWerte): float|int
+    private function alleGrundwerte($User, object $u_Besonderheiten): float|int
     {
         $Tagebekommen = 0;
         $vorteil = [
             'Stärke' => 'Staerke',
             'Verteidigung' => 'Verteidigung',
-            'Geschwindigkeit' => 'Geschwindigkeit'
+            'Geschwindigkeit' => 'Geschwindigkeit',
         ];
         foreach ($vorteil as $spalte => $wert) {
             $Tagebekommen += $this->grundwerte(
@@ -91,10 +90,10 @@ final class trainingstage
      * Benötigt werden:
      * Alle Vor/Nachteile, die sich auf Grundwerte auswirken
      */
-    public function gesamtChar($User, $u_Besonderheiten, $trainWerte): float
+    public function gesamtChar(object $User, object $u_Besonderheiten, $trainWerte): float
     {
         $Tagebekommen = 0;
-        $Tagebekommen += $this->alleGrundwerte($User, $u_Besonderheiten, $trainWerte);
+        $Tagebekommen += $this->alleGrundwerte($User, $u_Besonderheiten);
         $schnitt = ($User->Geschwindigkeit + $User->Stärke + $User->Verteidigung) / 3;
         $endschnitt = $Tagebekommen / 3;
         echo $User->name . '<br>';

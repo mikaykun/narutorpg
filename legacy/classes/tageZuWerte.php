@@ -5,7 +5,7 @@ final class tageZuWerte
     /**
      * Berechnet Traintage eines Grundwerts
      */
-    public function grundwerte($u_Besonderheiten, $Niveau, $Tage, $wert): float|int
+    public function grundwerte(object $u_Besonderheiten, $Niveau, $Tage, string $wert): float|int
     {
         $Tage = ($Tage < 0) ? 0 : $Tage;
         $Wert = 1;

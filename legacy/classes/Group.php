@@ -3,24 +3,21 @@
 final class Group
 {
     public int $Id = 0;
-    public $Name;
-    public $ParentGroup;
-    public $UserId;
+    public string $Name;
+    public ?int $ParentGroup = null;
+    public ?int $UserId = null;
     public bool $IsOpenGroup;
-
-    public function __construct($name, $parentGroup, $userId, bool $isOpenGroup)
-    {
-        $this->Name = $name;
-        $this->ParentGroup = $parentGroup;
-        $this->UserId = $userId;
-        $this->IsOpenGroup = $isOpenGroup;
-    }
 
     public function SetValues(array $get): void
     {
-        $this->Id = intval($get["id"]);
+        $this->Id = (int)($get["id"]);
         $this->Name = $get["name"];
         $this->UserId = $get["userId"];
         $this->IsOpenGroup = $get["IsOpenGroup"];
+    }
+
+    public function setParentGroup(?int $ParentGroup): void
+    {
+        $this->ParentGroup = $ParentGroup;
     }
 }

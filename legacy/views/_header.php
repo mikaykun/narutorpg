@@ -13,19 +13,18 @@ declare(strict_types=1);
 
     <title><?= $this->e($title) ?></title>
 
-    <meta name="description" content="Willkommen auf narutorpg.de">
-    <meta name="author" content="Achim Kaltz">
+    <meta name="description" content="Führendes Naruto RPG: Erstelle deinen Charakter und erlebe einzigartige Abenteuer in einer über 15 Jahre alten, lebendigen Rollenspiel-Community.">
     <meta name="robots" content="index">
-    <meta name="keywords" content="RPG, Naruto, Narutorpg, Narutogame, Browsergame, Onlinegame, Naruto Onlinegame, Online RPG, Onlinerpg, Narutoonlinegame, Manga, Anime, Welf">
 
-    <link rel="stylesheet" href="/css/legacy.css"/>
-    <link rel="stylesheet" href="/Menus/js/themes/blue/style.css" type="text/css" media="print, projection, screen" />
+    <link rel="stylesheet" type="text/css" href="/Menus/js/themes/blue/style.css" media="print, projection, screen"/>
+    <link rel="stylesheet" type="text/css" href="/css/legacy.css"/>
 
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/jquery-migrate-1.4.1.min.js"></script>
+    <script src="/js/legacy.js"></script>
 
-    <script type="text/javascript" src="/Menus/js/functions.js"></script>
-    <script type="text/javascript" src="/Menus/js/image_resize.js"></script>
+    <script type="text/javascript" src="/Menus/js/functions.min.js"></script>
+    <script type="text/javascript" src="/Menus/js/image_resize.min.js"></script>
     <script type="text/javascript" src="/Menus/js/jquery.tablesorter.js"></script>
     <script type="text/javascript">
         $(function() {

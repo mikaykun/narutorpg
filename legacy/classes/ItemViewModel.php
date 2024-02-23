@@ -1,13 +1,11 @@
 <?php
 
-class ItemViewModel
+final class ItemViewModel
 {
-    public $item;
-    public $effects;
+    public ?Item $item = null;
+    public array $effects;
 
-    public function __construct() {}
-
-    public function SetItem($item): void
+    public function SetItem(?\Item $item): void
     {
         $this->item = $item;
     }
@@ -18,59 +16,35 @@ class ItemViewModel
         $this->item->SetValues($id);
     }
 
-    public function GetItem($itemId, $userId)
-    {
-        //currently not in use
-    }
-
-    public function SaveOrUpdateItem()
-    {
-        //currently not in use
-    }
-
-    public function GetItemListByUser($userId)
-    {
-        //currently not in use
-    }
-
-    public function GetItemTreeByUser($userId, $parentId, $params = null)
-    {
-        //currently not in use
-    }
-
-    public function GetItemEffects()
+    public function GetItemEffects(): void
     {
         if ($this->item == null) {
             return;
         }
 
         $effectViewModel = new EffectViewModel();
-
-        return ($this->effects = $effectViewModel->GetEffectsByItem($this->item));
+        $this->effects = $effectViewModel->GetEffectsByItem($this->item);
     }
 
-    public function connectItemEffects($eId, $effectConnection, $conId)
+    public function connectItemEffects(?string $eId, $effectConnection, $conId)
     {
         if ($this->item->Id == null || $eId == null || $effectConnection == null) {
             return;
         }
-        $effectQuery = "UPDATE eeEffectsItem SET connectionGroup = $effectConnection
-		WHERE `iId` = '" . $this->item->Id . "' AND `eId` = '" . $eId . "' AND connectionGroup = $conId";
+        $effectQuery = "UPDATE eeEffectsItem SET connectionGroup = $effectConnection WHERE `iId` = '" . $this->item->Id . "' AND `eId` = '" . $eId . "' AND connectionGroup = $conId";
         if (mysql_query($effectQuery)) {
             return true;
         }
-        return;
     }
 
-    public function AddOrDeleteEffectFromItem($eId, $conId = null, $del = null): void
+    public function AddOrDeleteEffectFromItem(?string $eId, $conId = null, $del = null): void
     {
         if ($this->item->Id == null || $eId == null) {
             return;
         }
 
         if ($del == null) {
-            $effectQuery = "insert into eeEffectsItem (iId,eId,connectionGroup)" .
-                " values('" . $this->item->Id . "','" . $eId . "',0)";
+            $effectQuery = "INSERT INTO eeEffectsItem (iId,eId,connectionGroup) VALUES ('" . $this->item->Id . "','" . $eId . "',0)";
         } else {
             $effectQuery = "DELETE FROM eeEffectsItem WHERE `iId` = '" . $this->item->Id . "' AND `eId` = '" . $eId . "' AND `connectionGroup` = '$conId'";
         }
@@ -78,7 +52,7 @@ class ItemViewModel
         mysql_query($effectQuery);
     }
 
-    public function GetGroupEffect($effectId, $userId)
+    public function GetGroupEffect($effectId, $userId): ?\Effect
     {
         $effectViewModel = new EffectViewModel();
 

@@ -2,7 +2,7 @@
 
 final class gefahrenPotential
 {
-    private function aRang($User, $u_Jutsu, $u_Fähigkeiten): array|int
+    private function aRang($User, array $u_Jutsu, array $u_Fähigkeiten): array|int
     {
         if ($User->Gefahrenpotential == 3) {
             $faeh3 = 0;
@@ -49,7 +49,7 @@ final class gefahrenPotential
         return 0;
     }
 
-    private function sRang($User, $u_Jutsu, $u_Fähigkeiten): array|int
+    private function sRang($User, array $u_Jutsu, array $u_Fähigkeiten): array|int
     {
         if ($User->Gefahrenpotential == 3 || $User->Gefahrenpotential == 4) {
             $faeh3 = 0;
@@ -100,7 +100,7 @@ final class gefahrenPotential
         return 0;
     }
 
-    public function GPErhoeh($User, $u_Jutsu, $u_Fähigkeiten, $erhoeh): array
+    public function GPErhoeh($User, array $u_Jutsu, array $u_Fähigkeiten, $erhoeh): array
     {
         $newGp = 0;
         if (gettype($Punkte = $this->aRang($User, $u_Jutsu, $u_Fähigkeiten)) == 'array') {
@@ -117,26 +117,22 @@ final class gefahrenPotential
                 echo 'GP-Anfrage gestellt.';
             }
         }
-        return [$newGp, $Punkte[0]];
+        return [$newGp, is_array($Punkte) ? $Punkte[0] : $Punkte];
     }
 
-    public function gpAnfrag($User, $newGp, $Punkte)
+    public function gpAnfrag($User, $newGp, string $Punkte): bool
     {
         $Anmerkung = $Punkte . ' Punkte';
-        $Zugriffe = "|RPCo|";
         $time = time();
         $Ausarbeitung = "Bitte prüft, ob das Gefahrenpotential dieses Users erhöht werden kann. Gefahrenpotential $newGp : $Anmerkung";
-        $ins = "INSERT INTO Anfragen (Ninja, Zugriffe, Titel, Ausarbeitung, lastact, Zustand, Art)
-					VALUES
-					('|$User->id|', '|RPCo|', 'Gefahrenpotential', '$Ausarbeitung', '$time', '0', '1')";
+        $ins = "INSERT INTO Anfragen (Ninja, Zugriffe, Titel, Ausarbeitung, lastact, Zustand, Art) VALUES ('|$User->id|', '|RPCo|', 'Gefahrenpotential', '$Ausarbeitung', '$time', '0', '1')";
         if (($ins = mysql_query($ins)) === true) {
             $sql = "SELECT id FROM Anfragen WHERE Ninja = '|$User->id|' ORDER BY id DESC Limit 0,1";
             $query = mysql_query($sql);
             $Eintrag = mysql_fetch_object($query);
             $Datum = date("d.m.Y, H:i");
-            $ins = "INSERT INTO Anfragen_Posts (Von, Topic, Text, Postdatum) VALUES
-				('', '$Eintrag->id', '$Ausarbeitung', '$Datum'),('', '$Eintrag->id', 'Keine SL-Informationen vorhanden', '$Datum'),('', '$Eintrag->id', 'Keine KR-Informationen vorhanden', '$Datum')";
-            $ins = mysql_query($ins) or die("Fehler2");
+            $ins = "INSERT INTO Anfragen_Posts (Von, Topic, Text, Postdatum) VALUES ('', '$Eintrag->id', '$Ausarbeitung', '$Datum'),('', '$Eintrag->id', 'Keine SL-Informationen vorhanden', '$Datum'),('', '$Eintrag->id', 'Keine KR-Informationen vorhanden', '$Datum')";
+            mysql_query($ins) or die("Fehler2");
             return true;
         }
         return false;
@@ -152,11 +148,10 @@ final class gefahrenPotential
         return false;
     }
 
-    public function missionPunkte($ARP, $BRP, $SRP)
+    public function missionPunkte($ARP, $BRP, $SRP): int|float
     {
         $mP = $BRP;
         $mP += $ARP * 2;
-        $mP += $SRP * 6;
-        return $mP;
+        return $mP + $SRP * 6;
     }
 }

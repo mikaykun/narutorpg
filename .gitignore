@@ -18,6 +18,10 @@
 ### SVN template
 .svn/
 
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+
 ### MacOS
 .DS_Store
 
@@ -38,3 +42,13 @@ node_modules/
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

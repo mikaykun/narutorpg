@@ -1,85 +1,63 @@
 <?php
 
-class JutsuViewModel
+final class JutsuViewModel
 {
-    public $jutsu;
-    public $effects;
+    public ?Jutsu $jutsu = null;
 
-    public function __construct() {}
+    /**
+     * @var array <Effect>
+     */
+    public array $effects = [];
 
-    public function SetJutsu($jutsu): void
+    public function SetJutsu(Jutsu $jutsu): void
     {
         $this->jutsu = $jutsu;
     }
 
-    public function NewJutsu($id): void
+    public function NewJutsu(int $id): void
     {
-        $this->jutsu = new Jutsu();
-        $this->jutsu->SetValues($id);
+        $this->jutsu = new Jutsu($id);
     }
 
-    public function GetJutsu($jutsuId, $userId)
-    {
-        //currently not in use
-    }
-
-    public function SaveOrUpdateJutsu()
-    {
-        //currently not in use
-    }
-
-    public function GetJutsuListByUser($userId)
-    {
-        //currently not in use
-    }
-
-    public function GetJutsuTreeByUser($userId, $parentId, $params = null)
-    {
-        //currently not in use
-    }
-
-    public function GetJutsuEffects()
+    public function GetJutsuEffects(): void
     {
         if ($this->jutsu == null) {
             return;
         }
 
         $effectViewModel = new EffectViewModel();
-
-        return ($this->effects = $effectViewModel->GetEffectsByJutsu($this->jutsu));
-
+        $this->effects = $effectViewModel->GetEffectsByJutsu($this->jutsu);
     }
 
     public function connectJutsuEffects($eId, $effectConnection, $conId)
     {
-        if ($this->jutsu->Id == null || $eId == null || $effectConnection == null) {
+        if ($this->jutsu->getId() == null || $eId == null || $effectConnection == null) {
             return;
         }
-        $effectQuery = "UPDATE eeEffectsJutsu SET connectionGroup = $effectConnection
-		WHERE `jId` = '" . $this->jutsu->Id . "' AND `eId` = '" . $eId . "' AND connectionGroup = $conId";
+        $effectQuery = "UPDATE eeEffectsJutsu SET connectionGroup = $effectConnection WHERE `jId` = '" . $this->jutsu->getId() . "' AND `eId` = '" . $eId . "' AND connectionGroup = $conId";
         if (mysql_query($effectQuery)) {
             return true;
         }
         return;
     }
 
-    public function AddOrDeleteEffectFromJutsu($eId, $conId = null, $del = null)
+    public function AddOrDeleteEffectFromJutsu($eId, $conId = null, $del = null): void
     {
-        if ($this->jutsu->Id == null || $eId == null) {
+        if ($this->jutsu->getId() == null || $eId == null) {
             return;
         }
 
         if ($del == null) {
             $effectQuery = "insert into eeEffectsJutsu (jId,eId,connectionGroup)" .
-                " values('" . $this->jutsu->Id . "','" . $eId . "',0)";
+                " values('" . $this->jutsu->getId() . "','" . $eId . "',0)";
         } else {
-            $effectQuery = "DELETE FROM eeEffectsJutsu WHERE `jId` = '" . $this->jutsu->Id . "' AND `eId` = '" . $eId . "' AND `connectionGroup` = '$conId'";
+            $effectQuery = "DELETE FROM eeEffectsJutsu WHERE `jId` = '" . $this->jutsu->getId() . "' AND `eId` = '" . $eId . "' AND `connectionGroup` = '$conId'";
         }
 
         mysql_query($effectQuery);
     }
 
-    public function GetGroupEffect($effectId, $userId)
+    public function GetGroupEffect($effectId, $userId): ?Effect
     {
         $effectViewModel = new EffectViewModel();
 

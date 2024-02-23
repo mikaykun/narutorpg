@@ -2,7 +2,7 @@
 
 final class EffectViewModel
 {
-    public function GetEffectsByGroup($group): array
+    public function GetEffectsByGroup(Group $group): array
     {
         $effectsSelect = "SELECT * FROM eeeffect LEFT JOIN eeGroupEffectRelation ON eeeffect.ID = eeGroupEffectRelation.effectID WHERE eeGroupEffectRelation.groupID =" . mysql_real_escape_string($group->Id);
         $effectsResult = mysql_query($effectsSelect);
@@ -18,9 +18,12 @@ final class EffectViewModel
         return $effects;
     }
 
-    public function GetEffectsByJutsu($jutsu): array
+    /**
+     * @return array<Effect>
+     */
+    public function GetEffectsByJutsu(Jutsu $jutsu): array
     {
-        $effectsSelect = "select * from eeEffectsJutsu efj LEFT JOIN eeeffect eee ON `efj`.`eId` = `eee`.`id` where efj.jId = '" . $jutsu->Id . "' ORDER BY efj.connectionGroup";
+        $effectsSelect = "SELECT * FROM eeEffectsJutsu efj INNER JOIN eeeffect eee ON `efj`.`eId` = `eee`.`id` WHERE efj.jId = '" . $jutsu->getId() . "' ORDER BY efj.connectionGroup";
         $effectsResult = mysql_query($effectsSelect);
         $effects = [];
 
@@ -79,7 +82,6 @@ final class EffectViewModel
                 $effectGroupQuery = "insert into eeGroupEffectRelation (effectID, groupID) values (" . $effect->Id . "," . mysql_real_escape_string($effect->GroupId) . ")";
                 mysql_query($effectGroupQuery);
             }
-
 
             return $this->group;
         }

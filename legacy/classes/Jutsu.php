@@ -1,15 +1,14 @@
 <?php
 
-class Jutsu
+final class Jutsu
 {
-	public $Id = 0;
+    public function __construct(
+        private readonly int $id
+    ) {
+    }
 
-	function __construct(){}
-
-	function SetValues($id)
-	{
-		$this->Id = $id;
-	}
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }
-
-?>

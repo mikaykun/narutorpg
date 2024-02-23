@@ -2,20 +2,19 @@
 
 class GroupViewModel
 {
-    public $group;
-    public $effects;
-    private PDO $db;
+    public ?Group $group;
+    public array $effects = [];
 
-    public function __construct() {}
-
-    public function SetGroup($group): void
+    public function NewGroup($name, ?int $parentGroup, $userId, bool $isOpenGroup = false): void
     {
-        $this->group = $group;
-    }
-
-    public function NewGroup($name, $parentGroup, $userId, bool $isOpenGroup = false): void
-    {
-        $this->group = new Group($name, $parentGroup, $userId, $isOpenGroup);
+        $this->group = new Group();
+        $this->group->SetValues([
+            "id" => 0,
+            "name" => $name,
+            "userId" => $userId,
+            "IsOpenGroup" => $isOpenGroup,
+        ]);
+        $this->group->setParentGroup($parentGroup);
     }
 
     public function GetGroup(int $groupId, ?int $userId, bool $ownOnly = true): void
@@ -28,19 +27,17 @@ class GroupViewModel
 
         if (mysql_num_rows($groupResult) == 1) {
             $parents = null;
-            $parentsSelect = "SELECT parentGroupID FROM eeGroupGroupRelation WHERE childGroupID = " . mysql_real_escape_string($groupId);
-            $parentsResult = mysql_query($parentsSelect);
+            $parentsResult = mysql_query(
+                "SELECT parentGroupID FROM eeGroupGroupRelation WHERE childGroupID = " . mysql_real_escape_string($groupId)
+            );
             if (mysql_num_rows($parentsResult) != 0) {
                 $parents = mysql_fetch_array($parentsResult)['parentGroupID'];
             }
 
             $result = mysql_fetch_array($groupResult);
-            $this->group = new Group(
-                $result["name"],
-                $parents,
-                $result["userId"],
-                $result["IsOpenGroup"]
-            );
+            $this->group = new Group();
+            $this->group->SetValues($result);
+            $this->group->setParentGroup($parents);
         }
     }
 
@@ -75,8 +72,7 @@ class GroupViewModel
                 $baukastenLog->defineLogEntry("Baukasten", "Hinzufügen der Gruppe $name");
                 $baukastenLog->logUpload();
                 if (!is_null($parentGroup)) {
-                    $relationQuery = "insert into eeGroupGroupRelation(parentGroupID,childGroupID)
-					values(" . $parentGroup . "," . $this->group->Id . ")";
+                    $relationQuery = "insert into eeGroupGroupRelation(parentGroupID,childGroupID) values(" . $parentGroup . "," . $this->group->Id . ")";
                     $relationResult = mysql_query($relationQuery);
                 }
             } else {
@@ -192,7 +188,7 @@ class GroupViewModel
         }
         $groupsResult = mysql_query($groupsSelect);
 
-        $groups = array();
+        $groups = [];
 
         while ($singleGroup = mysql_fetch_array($groupsResult)) {
             $group = new Group();
@@ -280,20 +276,17 @@ class GroupViewModel
         }
     }
 
-    public function CheckIfExist(?int $userId, $groupId, bool $ownOnly = true)
+    public function CheckIfExist(?int $userId, $groupId, bool $ownOnly = true): bool
     {
-        $mainSelect = "SELECT * FROM eegroup WHERE ";
+        $mainSelect = "SELECT COUNT(*) FROM eegroup WHERE ";
         if ($ownOnly && $userId != null) {
             $mainSelect .= "(userId = " . mysql_real_escape_string($userId) . " OR IsOpenGroup = true) AND ";
         }
         $mainSelect .= "id = " . mysql_real_escape_string($groupId);
 
-        $selectedGroup = mysql_query($mainSelect);
-        if (mysql_num_rows($selectedGroup) !== 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $dbc = nrpg_get_database();
+        $selectedGroup = $dbc->query($mainSelect);
+        return $selectedGroup !== false && $selectedGroup->fetchColumn() !== 0;
     }
 
     public function SearchGroupSelect($textSearch, $selectId, $ownOnly = 1)
@@ -336,17 +329,15 @@ class GroupViewModel
 
     }
 
-    public function GetGroupEffects()
+    public function GetGroupEffects(): array
     {
         if ($this->group == null) {
-            return;
+            return [];
         }
 
         $effectViewModel = new EffectViewModel();
-
-        return ($this->effects = $effectViewModel->GetEffectsByGroup($this->group));
-
-
+        $this->effects = $effectViewModel->GetEffectsByGroup($this->group);
+        return $this->effects;
     }
 
     public function AddOrUpdateEffectToGroup($post, $userId, $ownOnly = 1)

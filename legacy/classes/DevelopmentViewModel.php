@@ -1,18 +1,16 @@
 <?php
 
-class DevelopmentViewModel
+final class DevelopmentViewModel
 {
-    public $development;
+    public ?Development $development = null;
     public $developmentEffects;
 
-    public function __construct() {}
-
-    public function SetDevelopment($development): void
+    public function SetDevelopment(Development $development): void
     {
         $this->development = $development;
     }
 
-    public function NewDevelopment($post, $userId): void
+    public function NewDevelopment(array $post, $userId): void
     {
         $this->development = new Development();
 
@@ -25,7 +23,7 @@ class DevelopmentViewModel
         $this->development->Type = mysql_real_escape_string($post["type"]);
     }
 
-    public function GetDevelopment($developmentId, $userId)
+    public function GetDevelopment($developmentId, $userId): void
     {
         $developmentSelect = "select * from eedevelopment where (id = " . mysql_real_escape_string($developmentId) . " and userId = " . mysql_real_escape_string($userId) . ") or (id = " . mysql_real_escape_string($developmentId) . " and isPublic = true)";
 
@@ -33,6 +31,7 @@ class DevelopmentViewModel
 
         if (mysql_num_rows($developmentResult) == 0) {
             $this->development = null;
+            return;
         }
 
         $this->development = new Development();
@@ -40,7 +39,7 @@ class DevelopmentViewModel
         $this->development->SetValues(mysql_fetch_array($developmentResult));
     }
 
-    public function SaveOrUpdateDevelopment()
+    public function SaveOrUpdateDevelopment(): ?Development
     {
         if ($this->development == null) {
             return null;
@@ -89,24 +88,21 @@ class DevelopmentViewModel
 
         $developmentsResult = mysql_query($developmentsSelect);
 
-        $developments = array();
+        $developments = [];
 
         while ($singleDevelopment = mysql_fetch_array($developmentsResult)) {
             $development = new Development();
             $development->SetValues($singleDevelopment);
-            array_push($developments, $development);
+            $developments[] = $development;
         }
 
         return $developments;
     }
 
-    public function GetDevelopmentTreeByUser($userId, $parentId)
+    public function GetDevelopmentTreeByUser($userId, $parentId): string
     {
-        $result = "<ul>";
         $developmentsSelect = "select * from eedevelopment where (userId = " . mysql_real_escape_string($userId) . " or isPublic = true) and ";
-
         $developmentsSelect .= !isset($parentId) ? "parentId is null" : "parentId = " . mysql_real_escape_string($parentId);
-
         $developmentsResult = mysql_query($developmentsSelect);
 
         if (mysql_num_rows($developmentsResult) === 0) {
@@ -133,10 +129,10 @@ class DevelopmentViewModel
         $developmentEffectSelect = "select effectId from eedevelopmenthaseffect  where developmentId = " . $this->development->Id;
 
         $result = mysql_query($developmentEffectSelect);
-        $this->developmentEffects = array();
+        $this->developmentEffects = [];
 
         while ($effectId = mysql_fetch_array($result)) {
-            array_push($this->developmentEffects, $effectId["effectId"]);
+            $this->developmentEffects[] = $effectId["effectId"];
         }
     }
 
