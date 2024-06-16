@@ -22,3 +22,7 @@ indent_style = tab
 
 [*.neon]
 indent_style = tab
+
+# package.json
+[package.json]
+indent_size = 2
