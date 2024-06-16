@@ -1,9 +1,18 @@
-// webpack.mix.js
-
 let mix = require('laravel-mix');
 
-mix.setPublicPath('public');
+mix.options({
+    manifest: false,
+    processCssUrls: false,
+});
 
-mix.sass('resources/scss/legacy.scss', 'css');
+// Legacy code
+mix
+    .js('assets/legacy.js', 'js')
+    .sass('assets/styles/legacy.scss', 'css')
+    .minify('assets/menu1.js', 'public/js/menu1.js', false)
+    .setPublicPath('public');
 
-mix.js('resources/js/legacy.js', 'js');
+// New System
+mix
+    .sass('assets/styles/global.scss', 'css')
+    .setPublicPath('public');

@@ -4,21 +4,21 @@
 
 {% block body %}
 
-    <h1 class="my-5 font-bold text-3xl">Entwicklerupdates</h1>
+    <h1>Entwicklerupdates</h1>
 
     {% for post in posts %}
-        <section class="shadow-2xl bg-gray-50 mb-20">
-            <div class="shadow px-10 py-5">
-                <div class="mb-3 uppercase text-xs text-gray-500">
-                    <span class="text-blue-600">{{ post.type }}</span> Veröffentlicht {{ post.date }}
+        <article class="card mb-5 shadow">
+            <div class="card-header">
+                <div>
+                    <span class="badge text-bg-secondary">{{ post.type }}</span> Veröffentlicht {{ post.date }}
                 </div>
-                <h2 class="text-2xl">{{ post.title }}</h2>
+                <h2>{{ post.title }}</h2>
             </div>
 
-            <div class="prose p-10">
+            <div class="card-body">
                 {{ post.content|raw }}
             </div>
-        </section>
+        </article>
     {% endfor %}
 
 {% endblock %}

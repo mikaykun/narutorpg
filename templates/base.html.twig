@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Welcome!{% endblock %} | Naruto RPG</title>
+    <meta name="description" content="">
+    <meta name="robots" content="noindex">
+
+    {% block meta %}
+        <meta property="og:type" content="website">
+        <meta property="og:locale" content="de">
+    {% endblock %}
 
     <link rel="icon" href="{{ asset('img/favicons/favicon-196x196.svg') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     {% block stylesheets %}
+        <link href="{{ asset('css/global.css') }}" rel="stylesheet"/>
     {% endblock %}
 
     {% block javascripts %}
@@ -16,20 +25,36 @@
 </head>
 <body>
 
-<header class="bg-gray-100">
-    <nav class="mx-auto flex max-w-7xl items-center p-6 gap-x-6">
-        <a class="block font-semibold text-gray-900" href="{{ path('blog_index') }}">Blog</a>
+<div class="text-center p-2 bg-black text-white">
+    Dies ist eine neue BETA-Version für Naruto RPG. Bei Fragen oder Problemen wende dich bitte an das Team.
+</div>
+
+<header class="bg-body-tertiary">
+    <nav class="nav">
+        <a class="nav-link" href="{{ path('app_frontpage') }}">Startseite</a>
+        <a class="nav-link" href="{{ path('blog_index') }}">Entwicklerupdates</a>
     </nav>
 </header>
 
-{% block body %}{% endblock %}
+<main class="container">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-<footer class="text-white bg-black text-center p-10">
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="text-white bg-black text-center p-5">
     <p>
-        © {{ "now"|date("Y") }} NarutoRPG.<br>
-        All rights reserved. All trademarks are the property of their respective owners.<br>
-        <a class="underline" href="https://github.com/mikaykun/narutorpg" target="_blank">GitHub</a>
+        © {{ "now"|date("Y") }} Naruto RPG.<br>
+        All rights reserved. All trademarks are the property of their respective owners.
     </p>
+    <a class="btn btn-outline-secondary" href="https://github.com/mikaykun/narutorpg" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn btn-outline-secondary" href="https://ko-fi.com/mikaykun" target="_blank" rel="noopener">Support us at ko-fi.com</a>
 </footer>
 </body>
 </html>

@@ -9,15 +9,15 @@
 {% block title %}{{ title }} | DEV Blog{% endblock %}
 
 {% block body %}
-    <article class="mx-auto max-w-7xl bg-gray-50 rounded shadow-xl mb-20">
-        <div class="shadow px-10 py-5">
-            <div class="mb-3 uppercase text-xs text-gray-500">
-                <span class="text-blue-600">{{ type }}</span> Veröffentlicht {{ date }}
+    <article>
+        <div>
+            <div>
+                <span>{{ type }}</span> Veröffentlicht {{ date }}
             </div>
-            <h2 class="text-2xl">{{ title }}</h2>
+            <h2>{{ title }}</h2>
         </div>
 
-        <div class="prose p-10">
+        <div>
             {{ content|raw }}
         </div>
     </article>
