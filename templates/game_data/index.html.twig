@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestorbene Ninja{% endblock %}
+
+{% block body %}
+
+    <h1>Gestorbene Ninja</h1>
+    <p>In Gedenken an folgende Ninja, die ihr Leben f&uuml;r ihr Land gelassen haben:</p>
+
+    {% for name, ninjas in lands %}
+        <h2>{{ name }}</h2>
+        <p><img src="{{ asset(['Bilder/Infos/Landbilder/', name, '.svg']|join) }}" alt="{{ name }}"></p>
+        {% for ninja in ninjas %}
+            <p>
+                <b>{{ ninja.name }}</b>
+                {% if ninja.Missing %}
+                    als Verräter
+                {% endif %}
+                am <b>{{ ninja.Datum }}</b> gestorben
+            </p>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

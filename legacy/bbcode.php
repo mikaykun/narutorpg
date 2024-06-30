@@ -37,7 +37,7 @@ function convert_bbcode_spoiler(string $text): string
     return $text;
 }
 
-function convert_bcode_quote(string $text): string
+function convert_bbcode_quote(string $text): string
 {
     $Vorher = "";
     while ($Vorher != $text) {

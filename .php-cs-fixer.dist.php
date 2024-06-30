@@ -1,5 +1,7 @@
 <?php
 
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
@@ -10,15 +12,15 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRules([
-        '@PER-CS' => true,
+        '@PSR12' => true,
         '@PHP81Migration' => true,
+        'array_indentation' => true,
         'array_push' => true,
         'array_syntax' => ['syntax' => 'short'],
         'cast_spaces' => ['space' => 'none'],
         'concat_space' => ['spacing' => 'one'],
-        'declare_equal_normalize' => ['space' => 'none'],
-        'declare_parentheses' => true,
         'dir_constant' => true,
         'modernize_types_casting' => true,
         'native_function_casing' => true,
@@ -37,8 +39,13 @@ return (new PhpCsFixer\Config())
         'phpdoc_trim' => true,
         'phpdoc_types' => true,
         'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
+        'single_line_comment_style' => ['comment_types' => ['hash']],
+        'single_line_empty_body' => true,
         'single_line_throw' => false,
+        'single_space_around_construct' => true,
         'trailing_comma_in_multiline' => ['elements' => ['arrays']],
+        'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
+        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
     ])
     ->setFinder($finder)
 ;

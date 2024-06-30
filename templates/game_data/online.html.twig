@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wer ist online?{% endblock %}
+
+{% block body %}
+
+    <h1>Wer ist aktuell online?</h1>
+    <p>Innerhalb der letzten 5 Minuten waren online:</p>
+    <ul>
+        {% for user in users %}
+            <li>{{ user.username }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Des Weiteren sind {{ guests }} Gäste online.</p>
+
+{% endblock %}

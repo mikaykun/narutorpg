@@ -27,7 +27,7 @@ final class LiveSearchController extends AbstractController
         foreach ($users as $user) {
             $treffer .= sprintf(
                 '<a href="/userpopup.php?usernam=%s">%s</a><br>',
-                urlencode((string) $user["name"]),
+                urlencode((string)$user["name"]),
                 $user["name"]
             );
         }

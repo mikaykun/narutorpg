@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gelöschte Member{% endblock %}
+
+{% block body %}
+
+    <h1>Gelöschte Member</h1>
+    {% for user in users %}
+        {{ user.Text|raw }}
+    {% endfor %}
+
+    {% if maxid > 0 %}
+        <a href="{{ path('app_deleted_users', {maxid: maxid - 50}) }}" class="btn btn-outline-secondary">&laquo; Vorherige 50</a>
+    {% endif %}
+
+    <a href="{{ path('app_deleted_users', {maxid: maxid + 50}) }}" class="btn btn-outline-secondary">Nächste 50 &raquo;</a>
+
+{% endblock %}

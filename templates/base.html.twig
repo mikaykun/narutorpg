@@ -33,13 +33,15 @@
     <nav class="nav">
         <a class="nav-link" href="{{ path('app_frontpage') }}">Startseite</a>
         <a class="nav-link" href="{{ path('blog_index') }}">Entwicklerupdates</a>
+        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+        <a class="nav-link" href="{{ path('app_register') }}">Registrieren</a>
     </nav>
 </header>
 
 <main class="container">
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="flash-{{ label }}">
+            <div class="alert alert-{{ label }}" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
@@ -53,8 +55,11 @@
         © {{ "now"|date("Y") }} Naruto RPG.<br>
         All rights reserved. All trademarks are the property of their respective owners.
     </p>
-    <a class="btn btn-outline-secondary" href="https://github.com/mikaykun/narutorpg" target="_blank" rel="noopener">GitHub</a>
-    <a class="btn btn-outline-secondary" href="https://ko-fi.com/mikaykun" target="_blank" rel="noopener">Support us at ko-fi.com</a>
+    <nav class="nav justify-content-center">
+        <a class="nav-link" href="{{ path('app_imprint') }}">Impressum</a>
+        <a class="nav-link" href="https://github.com/mikaykun/narutorpg" target="_blank" rel="noopener">GitHub</a>
+        <a class="nav-link" href="https://ko-fi.com/mikaykun" target="_blank" rel="noopener">Support us at ko-fi.com</a>
+    </nav>
 </footer>
 </body>
 </html>

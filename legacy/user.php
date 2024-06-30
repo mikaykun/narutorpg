@@ -40,10 +40,19 @@ function is_user_logged_in(): bool
     return \NarutoRPG\SessionHelper::isLoggedIn();
 }
 
+/**
+ * Verify if the user is logged in, if not redirect to the index page
+ */
 function verify_loggedin_user(): void
 {
     if (!is_user_logged_in()) {
         header("Location: /index.php");
         exit;
     }
+}
+
+function nrpg_generate_random_password(int $chars = 8): string
+{
+    $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
+    return substr(str_shuffle($data), 0, $chars);
 }
