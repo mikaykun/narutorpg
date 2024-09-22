@@ -1,4 +1,20 @@
-/.ddev export-ignore
-
 # Enforce checkout with linux lf consistent over all platforms
-*.php text eol=lf
+*.php eol=lf diff=php
+*.inc eol=lf diff=php
+
+# Documents
+*.doc  diff=astextplain
+*.docx diff=astextplain
+*.rtf  diff=astextplain
+*.odt  diff=astextplain
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary
+*.ico binary
+
+.ddev export-ignore
+.editorconfig export-ignore
+.gitattributes export-ignore

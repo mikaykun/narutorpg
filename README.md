@@ -1,10 +1,10 @@
-# NarutoRPG
+# Naruto RPG
 
 ## Overview
 
 ### Server Requirements
 
-To run NarutoRPG we recommend your host supports:
+To run Naruto RPG we recommend your host supports:
 
 * PHP version 8.1 or greater.
 * MariaDB version 10.6 or greater.

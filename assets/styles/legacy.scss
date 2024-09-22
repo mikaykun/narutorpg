@@ -32,69 +32,46 @@ body {
 /* Menus */
 .menulinks,
 .menurechts {
-    position: relative;
-    z-index: 1;
-    width: 130px;
-    height: auto;
-    font-weight: normal;
-}
-
-.menulinks {
-    margin-left: 2px;
-}
-
-.menurechts {
-    margin-right: 3px;
+    > .unterpunkt {
+        margin-bottom: 2px;
+    }
 }
 
 .untermenulinks,
 .untermenurechts {
-    position: absolute;
-    z-index: 1;
-    top: 0;
     display: none;
-    min-width: 130px;
-    font-weight: normal;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 .untermenulinks {
-    left: 125px;
+    left: 100%;
 }
 
 .untermenurechts {
-    left: -131px;
-}
-
-.untermenu_bg {
-    position: relative;
-    margin-left: 15px;
-    height: auto;
-}
-
-.untermenu_bg_rechts {
-    position: relative;
-    margin-right: 200px;
-    width: 130px;
-    height: auto;
+    right: 100%;
 }
 
 .unterpunkt {
     position: relative;
-    z-index: 2;
-    margin-top: 2px;
-    border: 1px black solid;
-    background-image: url("/layouts/Uebergang/Oben.png");
-    font-weight: normal;
-    text-align: center;
 
-    &:hover {
-        background-image: url("/layouts/Uebergang/Oben2.png");
+    &:hover .untermenulinks,
+    &:hover .untermenurechts {
+        display: block;
     }
 
-    a {
+    > a {
         display: block;
         color: black;
         text-decoration: none;
+        border: 1px black solid;
+        text-align: center;
+        background-image: url("/layouts/Uebergang/Oben.svg");
+
+        &:hover {
+            background-image: url("/layouts/Uebergang/Oben2.svg");
+        }
     }
 }
 

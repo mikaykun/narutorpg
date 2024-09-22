@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Run Symfony commands in the container
+## Usage: symfony [command]
+
+bin/console "$@"

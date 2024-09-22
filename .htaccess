@@ -1,0 +1,7 @@
+<IfModule mod_alias.c>
+	# Restrict access to VCS directories
+	RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
+
+	# Restrict access to root folder files
+	RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist|\.env.*)$
+</IfModule>
