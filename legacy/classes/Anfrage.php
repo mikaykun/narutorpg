@@ -148,15 +148,14 @@ final class Anfrage
         return $where;
     }
 
-    public function getUserIdByName($name)
+    public function getUserIdByName(string $name): int|bool
     {
-        $sql = 'SELECT id FROM user WHERE `name` = \'' . $name . '\'';
-        $query = mysql_query($sql);
-        if ($ninj = mysql_fetch_object($query)) {
-            return $ninj->id;
-        } else {
-            return false;
+        $query = $this->connection->prepare('SELECT id FROM user WHERE `name` = :name LIMIT 1');
+        $query->execute(['name' => $name]);
+        if ($ninj = $query->fetchObject()) {
+            return (int)$ninj->id;
         }
+        return false;
     }
 
     //prüfen welche der vars hier wirklich gebraucht werden!

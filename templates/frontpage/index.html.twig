@@ -10,9 +10,42 @@
     </p>
     <p>
         Hier könnt ihr euch einen Ninja-Anwärter erstellen und mit diesem euren eigenen Ninjaweg beschreiten.
-        Ihr startet als Akademist an der Ninja Akademie und könnt euch von dort an bis zum Anführer eures Dorfes hocharbeiten.
-        Oder ihr wendet euch von eurem Land ab und geht anderen Zielen nach.
+        Ihr startet als Akademist an der Ninja Akademie und könnt euch von dort an bis zum Anführer eures Dorfes
+        hocharbeiten. Oder ihr wendet euch von eurem Land ab und geht anderen Zielen nach.
     </p>
     <p><a href="{{ path('app_deleted_users') }}">Gelöschte User</a></p>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2>News</h2>
+            {% for news in newsList %}
+                <article class="border border-dark-subtle shadow-sm mb-3">
+                    <div class="p-3 bg-body-secondary">
+                        {% if news.Land != "" %}
+                            <div>
+                                <img src="Bilder/Infos/Landbilder/{{ news.Land }}.bmp" alt="">
+                            </div>
+                        {% endif %}
+                        <div>
+                            <span class="frontpage-news-author">{{ news.Verfasser }}</span>, am {{ news.Datum }}
+                        </div>
+                        <h3>{{ news.Titel }}</h3>
+                    </div>
+                    <div class="p-3">
+                        {{ news.Text|bbcode|raw }}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        <aside class="col-md-4">
+            <h2>DevUpdates</h2>
+            {% for post in devUpdates %}
+                <article class="border mb-3 p-2">
+                    {{ post.date }}<br>
+                    <span class="fw-bold">{{ post.title }}</span>
+                </article>
+            {% endfor %}
+        </aside>
+    </div>
 
 {% endblock %}

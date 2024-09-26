@@ -36,25 +36,49 @@ final class PrivateMessage
     public function send(): bool
     {
         $dbc = nrpg_get_database();
-        $dbc->beginTransaction();
-        $user_update = $dbc->prepare("UPDATE user SET nm = 1 WHERE id = :id")
-            ->execute([':id' => $this->receiver_id]);
-        $message_send = $dbc->prepare("INSERT INTO Posteingang (An, Von, Name, Betreff, Text, Datum) VALUES (:an, :von, :name, :subject, :body, :datum)")
-            ->execute([
-                ':an' => $this->receiver_id,
-                ':von' => $this->sender_id,
-                ':name' => $this->sender_name,
-                ':subject' => $this->subject,
-                ':body' => $this->body,
-                ':datum' => date("d.m.Y, H:i"),
-            ]);
 
-        if ($user_update && $message_send) {
-            $dbc->commit();
-            return true;
+        if ($dbc->inTransaction()) {
+            $user_update = $dbc->prepare("UPDATE user SET nm = 1 WHERE id = :id")
+                ->execute([':id' => $this->receiver_id]);
+            $message_send = $dbc->prepare(
+                "INSERT INTO Posteingang (An, Von, Name, Betreff, Text, Datum) VALUES (:an, :von, :name, :subject, :body, :datum)"
+            )
+                ->execute([
+                    ':an' => $this->receiver_id,
+                    ':von' => $this->sender_id,
+                    ':name' => $this->sender_name,
+                    ':subject' => $this->subject,
+                    ':body' => $this->body,
+                    ':datum' => date("d.m.Y, H:i"),
+                ]);
+
+            if ($user_update && $message_send) {
+                return true;
+            }
+        } else {
+            $dbc->beginTransaction();
+
+            $user_update = $dbc->prepare("UPDATE user SET nm = 1 WHERE id = :id")
+                ->execute([':id' => $this->receiver_id]);
+            $message_send = $dbc->prepare(
+                "INSERT INTO Posteingang (An, Von, Name, Betreff, Text, Datum) VALUES (:an, :von, :name, :subject, :body, :datum)"
+            )
+                ->execute([
+                    ':an' => $this->receiver_id,
+                    ':von' => $this->sender_id,
+                    ':name' => $this->sender_name,
+                    ':subject' => $this->subject,
+                    ':body' => $this->body,
+                    ':datum' => date("d.m.Y, H:i"),
+                ]);
+
+            if ($user_update && $message_send) {
+                $dbc->commit();
+                return true;
+            }
+
+            $dbc->rollBack();
         }
-
-        $dbc->rollBack();
         return false;
     }
 }

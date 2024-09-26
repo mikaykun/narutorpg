@@ -1,17 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-use Doctrine\ORM\Mapping as ORM;
+use NarutoLegacy\Components\Inventory;
 
 #[AllowDynamicProperties]
-#[ORM\Table(name: 'user')]
 final class CharacterData
 {
-    #[ORM\Column(type: 'integer')]
-    #[ORM\Id]
     public int $id = 0;
-    public string $Heimatdorf = '';
+    public ?string $Heimatdorf = '';
     public int|float $Chakra;
     public int|float $Ninjutsu;
     public int|float $Geschwindigkeit;
@@ -21,21 +16,25 @@ final class CharacterData
     public int|float $Verteidigung;
     public int|float $Genjutsu;
     public bool $feddig = false;
-    public string $Rang = '';
-    public string $Training;
+    public ?string $Rang = '';
+    public ?string $Training;
     public string $name;
     public string $Dauer;
-    public string $Biswert;
+    public ?string $Biswert;
     public int $doubleup;
     public int $Bonustage;
-    public bool $Spielleiter;
+    public bool $Spielleiter = false;
     public int $Rangwert = 0;
     public int $Geld;
-    public string $Standort;
+    public ?string $Standort;
     public int $Meldeverbot;
-    #[ORM\Column(type: 'integer')]
     public int $Landoberhaupt = 0;
-    public string $Team;
-    #[ORM\Column(type: 'integer')]
+    public ?string $Team;
     public int $Trainingspunkte = 0;
+    public int $Niveau = 0;
+
+    public function getInventory(): Inventory
+    {
+        return Inventory::getInventory($this->id);
+    }
 }

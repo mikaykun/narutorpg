@@ -1,0 +1,46 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <div class="p-5 shadow my-5 col-md-6 mx-auto">
+        {% if errorCode|default == 'mail_not_confirmed' %}
+            <div class="alert alert-info">
+                Du hast deine Mailadresse bisher nicht bestätigt. Daher ist der Login nicht möglich.<br>
+                Falls du eine gültige Mailadresse angegeben hast, kannst du
+                <a href="{{ mailConfirmationUrl }}" class="font-bold underline hover:text-opacity-60">hier</a>
+                eine Bestätigungsmail anfordern, welche dir an die angegebene Adresse geschickt wird.
+            </div>
+        {% elseif errorCode|default == 'user_blocked' %}
+            <div class="alert alert-warning">
+                Dieser User wurde gesperrt. Um ihn wieder entsperren zu lassen, melde dich bei webmaster@narutorpg.de
+                oder anderweitig bei einem Admin!
+            </div>
+        {% elseif errorCode|default %}
+            <div class="alert alert-danger">Passwort oder Benutzername falsch.</div>
+        {% endif %}
+
+        <form method="post" action="{{ path('app.legacy.login') }}">
+            <h1>Account-Login</h1>
+            <p class="text-muted">(Cookies müssen aktiviert sein!)</p>
+            <label class="form-label">
+                Login:
+                <input name="login" type="text" class="form-control">
+            </label>
+            <label class="form-label">
+                Passwort:
+                <input name="password" type="password" class="form-control">
+            </label>
+            <p>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </p>
+        </form>
+        <p><a href="{{ path('legacy_login_recovery') }}">Passwort/Loginname vergessen?</a></p>
+
+        <hr>
+
+        <p class="text-center">Noch keinen Account? <a href="{{ path('app.legacy.register') }}">Jetzt erstellen!</a></p>
+    </div>
+
+{% endblock %}

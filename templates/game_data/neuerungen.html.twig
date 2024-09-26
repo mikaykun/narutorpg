@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Neuerungen{% endblock %}
+
+{% block body %}
+
+    <h1>Letzte Neuerungen</h1>
+
+    {% for gameUpdate in gameUpdates %}
+        <article>
+            <h2>Änderungen vom {{ gameUpdate.publishedAt|raw }}</h2>
+           {{ gameUpdate.content|bbcode|raw }}
+        </article>
+    {% endfor %}
+
+{% endblock %}

@@ -3,6 +3,10 @@
 class GroupViewModel
 {
     public ?Group $group;
+
+    /**
+     * @var array<Effect>
+     */
     public array $effects = [];
 
     public function NewGroup($name, ?int $parentGroup, $userId, bool $isOpenGroup = false): void
@@ -73,7 +77,7 @@ class GroupViewModel
                 $baukastenLog->logUpload();
                 if (!is_null($parentGroup)) {
                     $relationQuery = "insert into eeGroupGroupRelation(parentGroupID,childGroupID) values(" . $parentGroup . "," . $this->group->Id . ")";
-                    $relationResult = mysql_query($relationQuery);
+                    mysql_query($relationQuery);
                 }
             } else {
                 $baukastenLog->defineLogEntry("Baukasten", "Gruppe " . $singleGroupName['name'] . " in $name umbenannt. Öffentlichkeit von " . ($singleGroupName['IsOpenGroup'] == "1" ? "true" : "false") . " zu $isOpenGroup geändert.");
@@ -85,11 +89,10 @@ class GroupViewModel
         return ($this->group = null);
     }
 
-    /*
-     * Löscht die Gruppe wenn man darauf Rechte hat.
-     *
+    /**
+     * Löscht die Gruppe, wenn man darauf Rechte hat.
      */
-    public function DeleteGroup($groupID, $ownOnly = 1)
+    public function DeleteGroup($groupID, $ownOnly = 1): ?bool
     {
         $baukastenLog = new LoggingTool();
         $groupID = mysql_real_escape_string($groupID);
@@ -109,9 +112,8 @@ class GroupViewModel
             $baukastenLog->defineLogEntry("Baukasten", "Gruppe " . $singleGroupName['name'] . " gelöscht.");
             $baukastenLog->logUpload();
             return true;
-        } else {
-            return null;
         }
+        return null;
     }
 
     public function AddParent($parentId, $groupId, $ownOnly = 1): ?bool
@@ -289,25 +291,29 @@ class GroupViewModel
         return $selectedGroup !== false && $selectedGroup->fetchColumn() !== 0;
     }
 
-    public function SearchGroupSelect($textSearch, $selectId, $ownOnly = 1)
+    public function SearchGroupSelect($textSearch, $selectId, $ownOnly = 1): bool|string
     {
-        $mainSelect = "SELECT * FROM eegroup WHERE ";
+        $mainSelect = "SELECT id, name FROM eegroup WHERE ";
         if ($ownOnly == 1) {
             $mainSelect .= "(userId = " . $_COOKIE['c_loged'] . " OR IsOpenGroup = true) AND ";
         }
         $mainSelect .= "name LIKE '%" . mysql_real_escape_string($textSearch) . "%' AND id != " . mysql_real_escape_string($selectId) . " ORDER BY name ASC";
         $mainSelect = mysql_query($mainSelect);
         if (mysql_num_rows($mainSelect) !== 0) {
+            $result = '';
             while ($singleGroup = mysql_fetch_array($mainSelect)) {
-                $result .= "<option value='" . $singleGroup['id'] . "'>" . htmlspecialchars($singleGroup['name']) . "</option>";
+                $result .= sprintf(
+                    "<option value='%d'>%s</option>",
+                    $singleGroup['id'],
+                    htmlspecialchars($singleGroup['name'])
+                );
             }
             return $result;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    public function SearchGroupParent($groupId, $ownOnly = 1)
+    public function SearchGroupParent($groupId, $ownOnly = 1): bool|string
     {
         $parentsSelect = "SELECT * FROM eegroup LEFT JOIN eeGroupGroupRelation ON eegroup.ID = eeGroupGroupRelation.parentGroupID WHERE ";
         if ($ownOnly == 1) {
@@ -323,10 +329,9 @@ class GroupViewModel
             }
             $result .= "</ul>";
             return $result;
-        } else {
-            return false;
         }
 
+        return false;
     }
 
     public function GetGroupEffects(): array

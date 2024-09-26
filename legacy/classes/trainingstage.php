@@ -15,7 +15,7 @@ final class trainingstage
             $Teiler -= 0.25;
         }
         $Teiler += 0.35;
-        return ($Userwert) / $Teiler;
+        return $Userwert / $Teiler;
     }
 
     public function ausdauer($u_Besonderheiten, $Userwert, $Niveau): float|int
@@ -44,40 +44,6 @@ final class trainingstage
             $Wert *= 1.5;
         }
         return $Wert;
-    }
-
-    private function missionen($User)
-    {
-        $Tagebekommen = 0;
-        $Tagebekommen += ($User->C - $User->CRP);
-        $Tagebekommen += ($User->B - $User->BRP);
-        $Tagebekommen += ($User->A - $User->ARP);
-        $Tagebekommen += ($User->S - $User->SRP);
-        return $Tagebekommen;
-    }
-
-    private function alleGrundwerte($User, object $u_Besonderheiten): float|int
-    {
-        $Tagebekommen = 0;
-        $vorteil = [
-            'Stärke' => 'Staerke',
-            'Verteidigung' => 'Verteidigung',
-            'Geschwindigkeit' => 'Geschwindigkeit',
-        ];
-        foreach ($vorteil as $spalte => $wert) {
-            $Tagebekommen += $this->grundwerte(
-                $User->$spalte - 10,
-                $u_Besonderheiten,
-                $wert,
-                1
-            );
-        }
-        return $Tagebekommen;
-    }
-
-    private function gfsTage($u_Besonderheiten): int
-    {
-        return ($u_Besonderheiten->Gentle == 1) ? 1 : 0;
     }
 
     /**
@@ -114,5 +80,39 @@ final class trainingstage
         $Tagebekommen = ceil($Tagebekommen);
         echo 'Gesamt:' . $Tagebekommen . '<br>';
         return $Tagebekommen;
+    }
+
+    private function missionen($User)
+    {
+        $Tagebekommen = 0;
+        $Tagebekommen += ($User->C - $User->CRP);
+        $Tagebekommen += ($User->B - $User->BRP);
+        $Tagebekommen += ($User->A - $User->ARP);
+        $Tagebekommen += ($User->S - $User->SRP);
+        return $Tagebekommen;
+    }
+
+    private function alleGrundwerte($User, object $u_Besonderheiten): float|int
+    {
+        $Tagebekommen = 0;
+        $vorteil = [
+            'Stärke' => 'Staerke',
+            'Verteidigung' => 'Verteidigung',
+            'Geschwindigkeit' => 'Geschwindigkeit',
+        ];
+        foreach ($vorteil as $spalte => $wert) {
+            $Tagebekommen += $this->grundwerte(
+                $User->$spalte - 10,
+                $u_Besonderheiten,
+                $wert,
+                1
+            );
+        }
+        return $Tagebekommen;
+    }
+
+    private function gfsTage($u_Besonderheiten): int
+    {
+        return ($u_Besonderheiten->Gentle == 1) ? 1 : 0;
     }
 }

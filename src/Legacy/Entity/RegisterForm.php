@@ -1,6 +1,6 @@
 <?php
 
-namespace NarutoRPG\Entity\Form;
+namespace NarutoRPG\Legacy\Entity;
 
 class RegisterForm
 {

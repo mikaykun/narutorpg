@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registratur{% endblock %}
+
+{% block body %}
+
+    <div class="row py-5">
+        <div class="col-md-8">
+            <div class="h1 text-uppercase">Kostenlos spielen</div>
+            <div class="h4 text-uppercase">Beginnt eure Reise noch heute</div>
+
+            <p>Erstellt noch heute einen Account und werdet ein Teil der Geschichte.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="shadow p-3">
+                {{ form_start(form) }}
+
+                {{ form_errors(form) }}
+
+                <h3 class="text-center">Die Reise beginnt.<br> Jetzt anmelden.</h3>
+
+                {{ form_row(form.nick) }}
+                {{ form_row(form.pw) }}
+                {{ form_row(form.mail) }}
+                {{ form_row(form.werb) }}
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="{{ field_name(form.Altersbest) }}" id="{{ form.Altersbest.vars.id }}" class="form-check-input" required>
+                        <label class="form-check-label" for="{{ form.Altersbest.vars.id }}">
+                            Hiermit bestätige ich, dass ich die
+                            <a href="https://wiki.narutorpg.de/index.php?title=Nutzungsbedingungen">Nutzungsbedingungen</a>
+                            gelesen habe und <b>mindestens</b> 12 Jahre oder älter bin.
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

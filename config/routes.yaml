@@ -3,3 +3,7 @@ controllers:
         path: ../src/Controller/
         namespace: NarutoRPG\Controller
     type: attribute
+
+app_legacy:
+  resource: .
+  type: legacy

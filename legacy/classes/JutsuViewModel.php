@@ -5,7 +5,7 @@ final class JutsuViewModel
     public ?Jutsu $jutsu = null;
 
     /**
-     * @var array <Effect>
+     * @var array<Effect>
      */
     public array $effects = [];
 
@@ -29,16 +29,16 @@ final class JutsuViewModel
         $this->effects = $effectViewModel->GetEffectsByJutsu($this->jutsu);
     }
 
-    public function connectJutsuEffects($eId, $effectConnection, $conId)
+    public function connectJutsuEffects($eId, $effectConnection, $conId): bool
     {
         if ($this->jutsu->getId() == null || $eId == null || $effectConnection == null) {
-            return;
+            return false;
         }
         $effectQuery = "UPDATE eeEffectsJutsu SET connectionGroup = $effectConnection WHERE `jId` = '" . $this->jutsu->getId() . "' AND `eId` = '" . $eId . "' AND connectionGroup = $conId";
         if (mysql_query($effectQuery)) {
             return true;
         }
-        return;
+        return false;
     }
 
     public function AddOrDeleteEffectFromJutsu($eId, $conId = null, $del = null): void

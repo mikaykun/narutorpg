@@ -42,24 +42,10 @@ final class Effect
         return $myEcho;
     }
 
-    public function SetValuesWithGroup(array $get, $group): void
+    public function SetValuesWithGroup(array $get, Group $group): void
     {
-        $this->Id = $get["id"];
-        $this->Name = $get["name"];
-        $this->Description = htmlspecialchars_decode($this->UrlFix($get["description"]));
-        $this->Costs = $get["costs"];
-        $this->Rank = $get["rank"];
-        $this->maxVal = $get['maxVal'];
-        $this->IsPublic = $get["isPublic"];
+        $this->SetValues($get);
         $this->Group = $group;
-        $this->GroupId = $get["groupId"];
-        $this->UserId = $get["userId"];
-        $this->freeAction = $get["freeAction"];
-        $this->kindOfCosts = $get["kindOfCosts"];
-        $this->IsAdvantage = $get["isAdvantage"];
-        $this->IsUpToDate = $get["isUpToDate"];
-        $this->connectionGroup = $get["connectionGroup"];
-        $this->affectAll = $get["affectAll"];
     }
 
     public function SetValues(array $get): void
@@ -77,11 +63,11 @@ final class Effect
         $this->kindOfCosts = $get["kindOfCosts"];
         $this->IsAdvantage = $get["isAdvantage"];
         $this->IsUpToDate = $get["isUpToDate"];
-        $this->connectionGroup = $get["connectionGroup"];
+        $this->connectionGroup = $get["connectionGroup"] ?? null;
         $this->affectAll = $get["affectAll"];
     }
 
-    public function GetUserByEffect()
+    public function GetUserByEffect(): array
     {
         $userItemsSelect = "select * from eeEffectsItem efi
 			LEFT JOIN `itemFaeh` i ON `efi`.`iId` = `i`.`iId`
@@ -92,7 +78,7 @@ final class Effect
         while ($userItem = mysql_fetch_array($userItemsResult)) {
             $user[$userItem['id']] = $userItem['name'];
         }
-        $jutsus = $this->GetJutsuByEffect($effect);
+        $jutsus = $this->GetJutsuByEffect();
         foreach ($jutsus as $jutsu) {
             $userJutsuSelect = "select * from Jutsuk jk
 				LEFT JOIN `user` u ON `jk`.`id` = `u`.`id` where `jk`.`" . $jutsu['Name'] . "` >= '1'";
@@ -105,7 +91,7 @@ final class Effect
         return $user;
     }
 
-    public function GetItemByEffect()
+    public function GetItemByEffect(): array
     {
         $itemsSelect = "select * from eeEffectsItem efi LEFT JOIN Itemsk i ON `efi`.`iId` = `i`.`id` where efi.eId = '" . $this->Id . "'";
         $itemsResult = mysql_query($itemsSelect);
@@ -117,7 +103,7 @@ final class Effect
         return $items;
     }
 
-    public function GetJutsuByEffect()
+    public function GetJutsuByEffect(): array
     {
         $jutsuSelect = "select * from eeEffectsJutsu efi LEFT JOIN Jutsu j ON `efi`.`jId` = `j`.`id` where efi.eId = '" . $this->Id . "'";
         $jutsuResult = mysql_query($jutsuSelect);
@@ -130,7 +116,7 @@ final class Effect
         return $jutsus;
     }
 
-    public function GetObligatoryEffects()
+    public function GetObligatoryEffects(): array
     {
         $obESelect = "select * from `eeObligatoryEffects` eeOb LEFT JOIN `eeeffect` eeef ON `eeOb`.`dEId` = `eeef`.`id` where eeef.eId = '" . $this->Id . "'";
         $obEResult = mysql_query($obESelect);

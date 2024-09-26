@@ -4,7 +4,6 @@ namespace NarutoRPG\Controller;
 
 use Doctrine\DBAL\Connection;
 use NarutoRPG\Repository\GameUpdatesRepository;
-use NarutoRPG\Service\LegacyDatabaseConnection;
 use NarutoRPG\Types\Villages;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,15 +13,17 @@ use Symfony\Component\Routing\Annotation\Route;
 final class GameDataController extends AbstractController
 {
     #[Route('/gamedata/deceased-ninja', name: 'app_deceased_ninja')]
-    public function index(LegacyDatabaseConnection $connection): Response
+    public function index(Connection $connection): Response
     {
         $landNames = Villages::all();
         $lands = [];
 
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder->select('name', 'Missing', 'Datum')->from('Gedenken')->orderBy('id', 'DESC');
+
         foreach ($landNames as $name) {
-            $lands[$name] = $connection
-                ->query("SELECT name, Missing, Datum FROM Gedenken WHERE Land = '" . $name . "' ORDER BY id DESC")
-                ->fetchAll(\PDO::FETCH_OBJ);
+            $queryBuilder->setParameter('land', $name);
+            $lands[$name] = $queryBuilder->fetchAllAssociative();
         }
 
         return $this->render('game_data/index.html.twig', [
@@ -51,7 +52,7 @@ final class GameDataController extends AbstractController
 
         foreach ($doerfer as $dorf) {
             $sql = "SELECT name FROM onlineuser WHERE Land = :dorf";
-            $users = $connection->executeQuery($sql, ['dorf'=>$dorf])->fetchAllAssociative();
+            $users = $connection->executeQuery($sql, ['dorf' => $dorf])->fetchAllAssociative();
 
             if (empty($users)) {
                 continue;
@@ -67,12 +68,17 @@ final class GameDataController extends AbstractController
     }
 
     #[Route('/gamedata/deleted-user', name: 'app_deleted_users')]
-    public function deletedUsers(Request $request, LegacyDatabaseConnection $connection): Response
+    public function deletedUsers(Request $request, Connection $connection): Response
     {
-        $maxid = max(0, (int)$request->query->get('maxid', 0));
+        $maxid = max(0, $request->query->getInt('maxid'));
 
-        $query = $connection->query("SELECT * FROM `Killing` ORDER BY `id` DESC LIMIT $maxid, 50");
-        $users = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder->select('Text')
+            ->from('Killing')
+            ->orderBy('id', 'DESC')
+            ->setMaxResults(50)
+            ->setFirstResult($maxid);
+        $users = $queryBuilder->fetchAllAssociative();
 
         return $this->render('game_data/deleted.html.twig', [
             'maxid' => $maxid,

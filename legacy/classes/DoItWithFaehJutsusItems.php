@@ -8,14 +8,6 @@ class DoItWithFaehJutsusItems
     private $money;
     private $cp;
 
-    private function getItemInfos($iName)
-    {
-        $itemInfos = 'SELECT `id`,`Kosten` FROM `Itemsk` WHERE `Name` = \'' . $iName . '\'';
-        $itemInfos = mysql_query($itemInfos);
-        $itemInfos = mysql_fetch_array($itemInfos);
-        return $itemInfos;
-    }
-
     public function itemTPBack($iId, $owner, $grund, $iName)
     {
         $tp = $this->tpKostenBack->howMuchIsThisItem($iId, 0, $owner, 0);
@@ -270,5 +262,13 @@ class DoItWithFaehJutsusItems
             }
         }
         return $tp;
+    }
+
+    private function getItemInfos($iName)
+    {
+        $itemInfos = 'SELECT `id`,`Kosten` FROM `Itemsk` WHERE `Name` = \'' . $iName . '\'';
+        $itemInfos = mysql_query($itemInfos);
+        $itemInfos = mysql_fetch_array($itemInfos);
+        return $itemInfos;
     }
 }

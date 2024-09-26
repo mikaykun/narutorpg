@@ -112,21 +112,6 @@ final class tpKosten
         mysql_query($insert) or die("Fehler beim Eintragen ins NPC-System");
     }
 
-    private function kindOfJutsu(array $Jutsu): array
-    {
-        if ($Jutsu['Taijutsu'] > $Jutsu['Ninjutsu'] and $Jutsu['Taijutsu'] > $Jutsu['Genjutsu']) {
-            $Art = $Jutsu['Taijutsu'];
-            $type = 'Taijutsu';
-        } elseif ($Jutsu['Taijutsu'] < $Jutsu['Ninjutsu'] and $Jutsu['Ninjutsu'] > $Jutsu['Genjutsu']) {
-            $Art = $Jutsu['Ninjutsu'];
-            $type = 'Ninjutsu';
-        } else {
-            $Art = $Jutsu['Genjutsu'];
-            $type = 'Genjutsu';
-        }
-        return [$type, $Art];
-    }
-
     public function howMuchIsThisJutsu(string $name, bool $Vorganger, array $u_Jutsu, $Nachfolger, int $returnMoreVals = 0)
     {
         $query = $this->pdo->query("SELECT * FROM Jutsu WHERE `Name` = '$name' LIMIT 1");
@@ -188,26 +173,6 @@ final class tpKosten
             return [$TP, $Art, $type, $Jutsu['Element']];
         }
         return $TP;
-    }
-
-    /**
-     * function howMuchRAllJutsus
-     * $u_Jutsu array, alle Jutsus des Users in der Form $key = Name,
-     * $value = Stufe
-     * returns (unsigned)int $TP-Gesamt-Kosten aller Jutsus dieses Users
-     * (bzw alle die rein gegeben wurden)
-     *
-     * @param array<string,mixed> $u_Jutsu
-     */
-    private function howMuchRAllJutsus(array $u_Jutsu): int|float
-    {
-        $tpBack = 0;
-        foreach ($u_Jutsu as $key => $value) {
-            if ($value > 0 && $key != 'id') {
-                $tpBack += $this->howMuchIsThisJutsu($key, 0, $u_Jutsu, 0);
-            }
-        }
-        return $tpBack;
     }
 
     /**
@@ -381,29 +346,6 @@ final class tpKosten
     }
 
     /**
-     * $key string, Tabellenname der Fähigkeit
-     * $value (unsigned) int höchste Stufe der Fähigkeit, die einbezogen werden
-     * soll
-     * $Niveau (unsigned)int Niveau des Spielers, für den die TP-Kosten
-     * berechnet werden sollen
-     * RETURNS (unsigned)int Gesamt-TPkosten der Fähigkeit bis zur angegebenen
-     * Stufe (z.b. bis Stufe 3, also 1,2 und 3)
-     */
-    private function howMuchRAllStepsOfThisFeah(string $key, $value): int
-    {
-        $tpBekommen = 0;
-        $sql = "SELECT * FROM Informationen_Faehs WHERE `Tabellenname` = '$key'";
-        $query = mysql_query($sql);
-        $Faeh = mysql_fetch_array($query, MYSQL_ASSOC);
-        $Stufe = $value;
-        while ($Stufe > 0) {
-            $tpBekommen += $this->howMuchIsThisFaeh($Stufe, $Faeh);
-            $Stufe--;
-        }
-        return $tpBekommen;
-    }
-
-    /**
      * @param array<string,mixed> $u_Fähigkeit $key = Name der Fähigkeit, $value = Stufe
      *
      * @return int Gesamt-TPkosten aller angegebenen Fähigkeiten bis zu den jeweiligen Stufen
@@ -422,41 +364,6 @@ final class tpKosten
             }
         }
         return $tpBack;
-    }
-
-    private function howMuchRAllItems(int $uid): int
-    {
-        $tp = 0;
-        $items = $this->pdo->query("SELECT `iId` FROM `itemFaeh` WHERE `uId` = '" . $uid . "'");
-        while ($item = $items->fetch(PDO::FETCH_ASSOC)) {
-            $tp += $this->howMuchIsThisItem($item['iId'], 0, $uid, 1);
-        }
-        return $tp;
-    }
-
-    private function howMuchRAllEEJutsus($User, array $u_Jutsu): float|int
-    {
-        $tp = 0;
-        foreach ($u_Jutsu as $name => $val) {
-            $query = $this->pdo->query("SELECT Eigenejutsu FROM Jutsu WHERE Name = '$name'");
-            $Jutsu = $query->fetch(PDO::FETCH_ASSOC);
-            if (is_array($Jutsu) && $Jutsu['Eigenejutsu'] != 1) {
-                unset($u_Jutsu[$name]);
-            }
-        }
-        $tp += $this->howMuchRAllJutsus($u_Jutsu);
-        return $tp;
-    }
-
-    private function howMuchRAllEEItems(int $uid): int
-    {
-        $tp = 0;
-        $items = "SELECT `iId` FROM `itemFaeh` fa LEFT JOIN `Itemsk` ik ON fa.`iId` = ik.`id` WHERE `uId` = '" . $uid . "' AND (`Useronly` != '' OR `Perso` != '' OR `Land` != '')";
-        $items = mysql_query($items);
-        while ($item = mysql_fetch_array($items)) {
-            $tp += $this->howMuchIsThisItem($item['iId'], 0, $uid, 1);
-        }
-        return $tp;
     }
 
     public function howMuchRAllEEs($User, $u_Jutsu)
@@ -527,6 +434,110 @@ final class tpKosten
         return $this->ClanTPNiveau($Clan, $niveau);
     }
 
+    public function ClanTPGesamt($User, $Besonderheiten): int
+    {
+        $maxClanTP = 0;
+        $niveau = 0;
+        while ($niveau < $User->Niveau) {
+            $niveau++;
+            $maxClanTP += $this->ClanTPNiveauClan($User, $niveau, $Besonderheiten);
+        }
+        return $maxClanTP;
+    }
+
+    private function kindOfJutsu(array $Jutsu): array
+    {
+        if ($Jutsu['Taijutsu'] > $Jutsu['Ninjutsu'] and $Jutsu['Taijutsu'] > $Jutsu['Genjutsu']) {
+            $Art = $Jutsu['Taijutsu'];
+            $type = 'Taijutsu';
+        } elseif ($Jutsu['Taijutsu'] < $Jutsu['Ninjutsu'] and $Jutsu['Ninjutsu'] > $Jutsu['Genjutsu']) {
+            $Art = $Jutsu['Ninjutsu'];
+            $type = 'Ninjutsu';
+        } else {
+            $Art = $Jutsu['Genjutsu'];
+            $type = 'Genjutsu';
+        }
+        return [$type, $Art];
+    }
+
+    /**
+     * function howMuchRAllJutsus
+     * $u_Jutsu array, alle Jutsus des Users in der Form $key = Name,
+     * $value = Stufe
+     * returns (unsigned)int $TP-Gesamt-Kosten aller Jutsus dieses Users
+     * (bzw alle die rein gegeben wurden)
+     *
+     * @param array<string,mixed> $u_Jutsu
+     */
+    private function howMuchRAllJutsus(array $u_Jutsu): int|float
+    {
+        $tpBack = 0;
+        foreach ($u_Jutsu as $key => $value) {
+            if ($value > 0 && $key != 'id') {
+                $tpBack += $this->howMuchIsThisJutsu($key, 0, $u_Jutsu, 0);
+            }
+        }
+        return $tpBack;
+    }
+
+    /**
+     * $key string, Tabellenname der Fähigkeit
+     * $value (unsigned) int höchste Stufe der Fähigkeit, die einbezogen werden
+     * soll
+     * $Niveau (unsigned)int Niveau des Spielers, für den die TP-Kosten
+     * berechnet werden sollen
+     * RETURNS (unsigned)int Gesamt-TPkosten der Fähigkeit bis zur angegebenen
+     * Stufe (z.b. bis Stufe 3, also 1,2 und 3)
+     */
+    private function howMuchRAllStepsOfThisFeah(string $key, $value): int
+    {
+        $tpBekommen = 0;
+        $sql = "SELECT * FROM Informationen_Faehs WHERE `Tabellenname` = '$key'";
+        $query = mysql_query($sql);
+        $Faeh = mysql_fetch_array($query, MYSQL_ASSOC);
+        $Stufe = $value;
+        while ($Stufe > 0) {
+            $tpBekommen += $this->howMuchIsThisFaeh($Stufe, $Faeh);
+            $Stufe--;
+        }
+        return $tpBekommen;
+    }
+
+    private function howMuchRAllItems(int $uid): int
+    {
+        $tp = 0;
+        $items = $this->pdo->query("SELECT `iId` FROM `itemFaeh` WHERE `uId` = '" . $uid . "'");
+        while ($item = $items->fetch(PDO::FETCH_ASSOC)) {
+            $tp += $this->howMuchIsThisItem($item['iId'], 0, $uid, 1);
+        }
+        return $tp;
+    }
+
+    private function howMuchRAllEEJutsus($User, array $u_Jutsu): float|int
+    {
+        $tp = 0;
+        foreach ($u_Jutsu as $name => $val) {
+            $query = $this->pdo->query("SELECT Eigenejutsu FROM Jutsu WHERE Name = '$name'");
+            $Jutsu = $query->fetch(PDO::FETCH_ASSOC);
+            if (is_array($Jutsu) && $Jutsu['Eigenejutsu'] != 1) {
+                unset($u_Jutsu[$name]);
+            }
+        }
+        $tp += $this->howMuchRAllJutsus($u_Jutsu);
+        return $tp;
+    }
+
+    private function howMuchRAllEEItems(int $uid): int
+    {
+        $tp = 0;
+        $items = "SELECT `iId` FROM `itemFaeh` fa LEFT JOIN `Itemsk` ik ON fa.`iId` = ik.`id` WHERE `uId` = '" . $uid . "' AND (`Useronly` != '' OR `Perso` != '' OR `Land` != '')";
+        $items = mysql_query($items);
+        while ($item = mysql_fetch_array($items)) {
+            $tp += $this->howMuchIsThisItem($item['iId'], 0, $uid, 1);
+        }
+        return $tp;
+    }
+
     private function ClanTPNiveau(string $Clan, int $niveau): int
     {
         $niveau -= 1;
@@ -546,16 +557,5 @@ final class tpKosten
             return $clanTP[$Clan][$niveau];
         }
         return 0;
-    }
-
-    public function ClanTPGesamt($User, $Besonderheiten): int
-    {
-        $maxClanTP = 0;
-        $niveau = 0;
-        while ($niveau < $User->Niveau) {
-            $niveau++;
-            $maxClanTP += $this->ClanTPNiveauClan($User, $niveau, $Besonderheiten);
-        }
-        return $maxClanTP;
     }
 }

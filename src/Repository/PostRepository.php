@@ -4,18 +4,18 @@ namespace NarutoRPG\Repository;
 
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
+use Symfony\Component\Finder\Finder;
 
 final class PostRepository
 {
     public function findAll(): array
     {
         $posts = [];
-        $files = glob(__DIR__ . '/../../data/*.md');
-        rsort($files);
 
+        $finder = $this->getFinder();
         $converter = $this->getCommonMarkConverter();
 
-        foreach ($files as $file) {
+        foreach ($finder as $file) {
             $result = $converter->convert(file_get_contents($file));
             $frontMatter = $result->getFrontMatter();
 
@@ -53,6 +53,15 @@ final class PostRepository
         }
 
         return null;
+    }
+
+    private function getFinder(): Finder
+    {
+        $finder = new Finder();
+        $finder->files()->in(__DIR__ . '/../../data')->name('*.md')->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
+            return $b->getMTime() - $a->getMTime();
+        });
+        return $finder;
     }
 
     private function getCommonMarkConverter(): CommonMarkConverter

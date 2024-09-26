@@ -4,6 +4,12 @@ final class ChataccViewModel
 {
     public $acc;
     public $username;
+    private PDO $connection;
+
+    public function __construct()
+    {
+        $this->connection = nrpg_get_database();
+    }
 
     public function SetAcc($acc, $username): void
     {
@@ -29,35 +35,35 @@ final class ChataccViewModel
     }
 
     //WIP
-    public function CreateOrDeleteChatacc($name, $NPC = 0, $vorlage, $del = null, $caId = null)
+    public function CreateOrDeleteChatacc($name, $NPC = 0, $vorlage = 0, bool $del = false, $caId = null): void
     {
         if ($this->acc == null || $this->username == null) {
             return;
         }
-        if ($del == null) {
-            $name = str_replace(" ", "", (string) $name);
-            $chatAccsSelect = "select `uid` from ajax_chat_user where REPLACE(`uname`, ' ', '') = '" . mysql_real_escape_string($name) . "'";
-            $chatAccsResult = mysql_query($chatAccsSelect);
-            if (($foreignCa = mysql_fetch_array($chatAccsResult)) != false) {
-                $vorrang = (str_replace(" ", "", (string) $this->username) == $name) ? 1 : 0;
+        if ($del) {
+            $chataccQuery = "DELETE FROM ajax_chat_user WHERE `uid` = '" . $caId . "' AND `aid` = '" . $this->acc . "'";
+        } else {
+            $name = str_replace(" ", "", (string)$name);
+            $chatAccsSelect = "select `uid` from ajax_chat_user where REPLACE(`uname`, ' ', '') = '" . $name . "'";
+            $chatAccsResult = $this->connection->query($chatAccsSelect);
+            $foreignCa = $chatAccsResult->fetch(PDO::FETCH_ASSOC);
+            if ($foreignCa !== false) {
+                $vorrang = (str_replace(" ", "", (string)$this->username) == $name) ? 1 : 0;
                 if ($vorrang == 0) {
                     echo 'Dieser Chataccount wird schon von jemandem verwendet.';
-                    return false;
+                    return;
                 }
                 $this->DeleteChataccById($foreignCa['uid']);
             }
-            $chataccQuery = "insert into ajax_chat_user (uname,aid,npc)" .
-                " values('" . $name . "','" . $this->acc . "','" . $NPC . "')";
-        } else {
-            $chataccQuery = "DELETE FROM ajax_chat_user WHERE `uid` = '" . $caId . "' AND `aid` = '" . $this->acc . "'";
+            $chataccQuery = "insert into ajax_chat_user (cookie,uname,aid,npc) values('','" . $name . "','" . $this->acc . "','" . $NPC . "')";
         }
-        mysql_query($chataccQuery);
+        $this->connection->exec($chataccQuery);
         if ($vorlage != 0) {
             $this->UpdateChataccToTemplate($name, $vorlage);
         }
     }
 
-    public function UpdateChataccToTemplate(string $caname, $tmplId)
+    public function UpdateChataccToTemplate(string $caname, $tmplId): bool
     {
         $tmplSelect = "select * from ajax_chat_user WHERE `uid` = '" . mysql_real_escape_string($tmplId) . "' AND `aid` = '" . $this->acc . "'";
         $tmplResult = mysql_query($tmplSelect);
@@ -77,15 +83,15 @@ final class ChataccViewModel
                 $optionsUp .= $tmplOpt . ' = \'' . $tmplSet . '\' ';
             }
             $optionsUp .= ' WHERE `uname` = \'' . $caname . '\' AND `aid` = \'' . $this->acc . '\'';
-        } else {
-            return false;
+            $this->connection->exec($optionsUp);
+            return true;
         }
-        mysql_query($optionsUp);
+        return false;
     }
 
     public function DeleteChataccById(string $caId): void
     {
         $chataccQuery = "DELETE FROM ajax_chat_user WHERE `uid` = '" . $caId . "'";
-        mysql_query($chataccQuery);
+        $this->connection->exec($chataccQuery);
     }
 }

@@ -28,3 +28,6 @@ services:
             $database: '%env(DB_NAME)%'
             $username: '%env(DB_USER)%'
             $password: '%env(DB_PASSWORD)%'
+
+    NarutoRPG\Legacy\LegacyRouteLoader:
+      tags: [routing.loader]

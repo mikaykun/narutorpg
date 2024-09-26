@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NarutoRPG\Service;
 
 final class LegacyDatabaseConnection extends \PDO

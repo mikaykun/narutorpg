@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inventar Info{% endblock %}
+
+{% block body %}
+    <p><img src="{{ asset('Bilder/Inventar/Item/Infobild.jpg') }}" class="mx-auto border border-black" alt=""></p>
+    <p class="text-center"><a href="{{ absolute_url('/Inventar.php?Angelegt=1') }}">Zurück</a></p>
+{% endblock %}

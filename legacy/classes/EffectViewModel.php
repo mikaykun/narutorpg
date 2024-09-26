@@ -87,36 +87,6 @@ final class EffectViewModel
         }
     }
 
-    //expects array($kindOfCostsId=>array($costs))
-    private function getConnectedEffectsCosts(array $costsArray): float|int
-    {
-        $costs = 0;
-        foreach ($costsArray[1] as $plus) {
-            $costs += $plus;
-        }
-        $multi = 0;
-        foreach ($costsArray[2] as $mult) {
-            $multi += $mult;
-        }
-        if ($multi != 0) {
-            $multi /= 100;
-            $costs *= $multi;
-        }
-        if (!empty($costsArray[3])) {
-            while (($max = max($costsArray[3])) !== false) {
-                $key = array_search($max, $costsArray[3]);
-                unset($costsArray[3][$key]);
-                $costs *= $max / 100;
-
-                if ($costsArray[3] === []) {
-                    break;
-                }
-            }
-        }
-
-        return $costs;
-    }
-
     public function costsEcho(array $groupCosts, $connGroup): float|int
     {
         $costs = $this->getConnectedEffectsCosts($groupCosts);
@@ -146,5 +116,35 @@ final class EffectViewModel
         $effect = new Effect();
         $effect->SetValues(mysql_fetch_array($effectResult));
         return $effect;
+    }
+
+    //expects array($kindOfCostsId=>array($costs))
+    private function getConnectedEffectsCosts(array $costsArray): float|int
+    {
+        $costs = 0;
+        foreach ($costsArray[1] as $plus) {
+            $costs += $plus;
+        }
+        $multi = 0;
+        foreach ($costsArray[2] as $mult) {
+            $multi += $mult;
+        }
+        if ($multi != 0) {
+            $multi /= 100;
+            $costs *= $multi;
+        }
+        if (!empty($costsArray[3])) {
+            while (($max = max($costsArray[3])) !== false) {
+                $key = array_search($max, $costsArray[3]);
+                unset($costsArray[3][$key]);
+                $costs *= $max / 100;
+
+                if ($costsArray[3] === []) {
+                    break;
+                }
+            }
+        }
+
+        return $costs;
     }
 }

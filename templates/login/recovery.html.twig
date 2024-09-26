@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Du kannst dich nicht anmelden?{% endblock %}
+
+{% block body %}
+
+    <div class="mx-auto w-50 py-5 text-center">
+        <h1>Identifikation deines Accounts</h1>
+        <p>Mit welchem Account hast du Probleme beim Einloggen?</p>
+
+        <p>Mit folgendem Login-Namen:</p>
+        <form method="post">
+            <input type="hidden" name="asdf" value="byUser">
+            <input type="text" name="username" maxlength="50" class="form-control mb-3">
+            <button type="submit" class="btn btn-primary">Logindaten zusenden lassen</button>
+        </form>
+
+        <hr>
+
+        <p>Mit folgender E-Mail:</p>
+        <form method="post">
+            <input type="hidden" name="asdf" value="byMail">
+            <input type="email" name="mail" class="form-control mb-3">
+            <button type="submit" class="btn btn-primary">Logindaten zusenden lassen</button>
+        </form>
+    </div>
+
+{% endblock %}

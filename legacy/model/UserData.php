@@ -2,17 +2,11 @@
 
 declare(strict_types=1);
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * User Data
- */
 #[AllowDynamicProperties]
-#[ORM\Table(name: 'userdaten')]
 final class UserData
 {
-    #[ORM\Id]
     public int $id = 0;
+    public string $name;
     public bool $Gesperrt;
     public bool $Linkunterstrich = false;
     public int $Charloesch = 0;
@@ -30,6 +24,7 @@ final class UserData
     public $LayoutArt;
     public string $Charerstellt;
     public int $Mod = 0;
+    public bool $Logprufer = false;
 
     public static function findById(int $id): self
     {
