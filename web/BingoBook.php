@@ -97,34 +97,32 @@ if ($dorfs2->Rang != "Akademist" || $dorfs2->NPC > 0) {
             $del = "DELETE FROM BingoBook WHERE `id` = '$Bingoeden';";
             $text = 'Löschung';
             mysql_query($del) or die("Löschung gescheitert");
-        }
-                else
-                {
-                    $SonstigesBingo = str_replace("'", "\"", $SonstigesBingo);
-                    $DorfBingo = str_replace("'", "\"", $DorfBingo);
-                    $RangBingo = str_replace("'", "\"", $RangBingo);
-                    $PotentialBingo = str_replace("'", "\"", $PotentialBingo);
-                    $LanderBingo    = str_replace("'", "\"", $LanderBingo);
-                    $SonstigesBingo = str_replace("'", "\"", $SonstigesBingo);
-                    $BildBingo      = str_replace("'", "\"", $BildBingo);
-                    $NinjaBingo     = str_replace("'", "\"", $NinjaBingo);
-                    $sql   = "SELECT id, name FROM user
-                    WHERE name = '$SpielerBingo'";
-                    $query = mysql_query($sql);
-                    $user  = mysql_fetch_object($query);
-                    if ($user->id > 0 AND $user->name != "") {
-                        $SpielerBingo = $user->id;
-                    } else {
-                        $SpielerBingo = 0;
-                    }
+        } else {
+            $SonstigesBingo = str_replace("'", "\"", $SonstigesBingo);
+            $DorfBingo = str_replace("'", "\"", $DorfBingo);
+            $RangBingo = str_replace("'", "\"", $RangBingo);
+            $PotentialBingo = str_replace("'", "\"", $PotentialBingo);
+            $LanderBingo    = str_replace("'", "\"", $LanderBingo);
+            $SonstigesBingo = str_replace("'", "\"", $SonstigesBingo);
+            $BildBingo      = str_replace("'", "\"", $BildBingo);
+            $NinjaBingo     = str_replace("'", "\"", $NinjaBingo);
+            $sql   = "SELECT id, name FROM user
+            WHERE name = '$SpielerBingo'";
+            $query = mysql_query($sql);
+            $user  = mysql_fetch_object($query);
+            if ($user->id > 0 AND $user->name != "") {
+                $SpielerBingo = $user->id;
+            } else {
+                $SpielerBingo = 0;
+            }
 
-                    if ($GesuchtBingo != 1) {
-                        $GesuchtBingo = 0;
-                    }
+            if ($GesuchtBingo != 1) {
+                $GesuchtBingo = 0;
+            }
 
-                    if ($PraemieBingo < 0) {
-                        $PraemieBingo = 0;
-                    }
+            if ($PraemieBingo < 0) {
+                $PraemieBingo = 0;
+            }
 
                     $SpezialisierungBingo = str_replace("'", "\"", $SpezialisierungBingo);
                     $sql   = "SELECT * FROm BingoBook WHERE id = '$Bingoeden'";
@@ -344,35 +342,36 @@ if ($dorfs2->Rang != "Akademist" || $dorfs2->NPC > 0) {
                         </tr>";
                 }
 
-                if ($BingoBook->Spieler > 0)
-                {
+                if ($BingoBook->Spieler > 0) {
                     $sql = "SELECT id, Gefahrenpotential FROM user WHERE id = '$BingoBook->Spieler'";
                     $query = mysql_query($sql);
                     $Ninja = mysql_fetch_object($query);
-                    if ($Ninja->Gefahrenpotential == 0){$Gefahrenpotential = "E-Rang";}
-                    if ($Ninja->Gefahrenpotential == 1){$Gefahrenpotential = "D-Rang";}
-                    if ($Ninja->Gefahrenpotential == 2){$Gefahrenpotential = "C-Rang";}
-                    if ($Ninja->Gefahrenpotential == 3){$Gefahrenpotential = "B-Rang";}
-                    if ($Ninja->Gefahrenpotential == 4){$Gefahrenpotential = "A-Rang";}
-                    if ($Ninja->Gefahrenpotential == 5){$Gefahrenpotential = "S-Rang";}
-                }
-                else
-                {
+                    if ($Ninja->Gefahrenpotential == 0) {
+                        $Gefahrenpotential = "E-Rang";
+                    } elseif ($Ninja->Gefahrenpotential == 1) {
+                        $Gefahrenpotential = "D-Rang";
+                    } elseif ($Ninja->Gefahrenpotential == 2) {
+                        $Gefahrenpotential = "C-Rang";
+                    } elseif ($Ninja->Gefahrenpotential == 3) {
+                        $Gefahrenpotential = "B-Rang";
+                    } elseif ($Ninja->Gefahrenpotential == 4) {
+                        $Gefahrenpotential = "A-Rang";
+                    } elseif ($Ninja->Gefahrenpotential == 5) {
+                        $Gefahrenpotential = "S-Rang";
+                    }
+                } else {
                     $Gefahrenpotential = "$BingoBook->Gefahrenpotential";
                 }
                 echo "<tr>
                     <td><b>Gefahrenpotential:</b></td>
                     <td>$Gefahrenpotential</td>
                     </tr>";
-                if ($BingoBook->Spieler > 0)
-                {
+                if ($BingoBook->Spieler > 0) {
                     $sql = "SELECT id, Rang FROM user WHERE id = '$BingoBook->Spieler'";
                     $query = mysql_query($sql);
                     $Ninja = mysql_fetch_object($query);
                     $Rang = $Ninja->Rang;
-                }
-                else
-                {
+                } else {
                     $Rang = $BingoBook->Rang;
                 }
                 if ($BingoBook->Spieler > 0)
@@ -496,9 +495,9 @@ if ($dorfs2->Rang != "Akademist" || $dorfs2->NPC > 0) {
                         $size["1"] *= $Prozent;
                         $size["1"] = round($size["1"], 0);
                         $up = "UPDATE BingoBook SET BildX = '$size[0]' WHERE id = '$BingoBook->id'";
-                        $up = mysql_query($up);
+                        mysql_query($up);
                         $up = "UPDATE BingoBook SET BildY = '$size[1]' WHERE id = '$BingoBook->id'";
-                        $up = mysql_query($up);
+                        mysql_query($up);
                         $BingoBook->BildX = $size[0];
                         $BingoBook->BildY = $size[1];
                     }
@@ -616,9 +615,7 @@ if ($dorfs2->Rang != "Akademist" || $dorfs2->NPC > 0) {
                 $Zahls = 0;
 
                 if ($dorfs2->Heimatdorf == "Konoha") {
-                    $pos = stripos($BingoBook->Land, "Konoha");
-                    if ($pos === false) {
-                    } else {
+                    if (stripos($BingoBook->Land, "Konoha") !== false) {
                         if ($Zahls == 0) {
                             echo "<tr>";
                         }

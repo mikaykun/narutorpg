@@ -28,7 +28,7 @@ if (empty($_POST['einheit_id']) || empty($_POST['forum_id'])) {
         $n = 0;
         $mitglieder = "";
         while ($mitglieder_array[$n] != "") {
-            $position = strpos($mitglieder_array[$n], "NPC:");
+            $position = strpos((string) $mitglieder_array[$n], "NPC:");
             if ($position === false) {
                 $mitglied = $mitglieder_array[$n];
             } else {
@@ -47,7 +47,7 @@ if (empty($_POST['einheit_id']) || empty($_POST['forum_id'])) {
             foreach ($zugang_array as $value) {
                 if ($value != $forum_id) { //Prüfen, ob $value gleich $forum_id ist
                     if ($value == end($zugang_array)) { //Nun gucken, ob $value das letzte Element des Arrays ist
-                        $zugang = trim($zugang[0]) . "|" . $forum_id . "|"; //Wenn ja: Update
+                        $zugang = trim((string) $zugang[0]) . "|" . $forum_id . "|"; //Wenn ja: Update
                         $update_sql = "UPDATE user SET ForumErlaubnis = '" . $zugang . "' WHERE id = '" . $mitglied . "'";
                         $update_query = mysql_query($update_sql) or die("Error2: " . mysql_error($conn));
                     }

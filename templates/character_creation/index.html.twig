@@ -1,0 +1,323 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Charaktererstellung{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function Dorfinfos() {
+            const form = document.getElementById('character_sheet');
+            const ele = form.querySelector('select[name="Heimatdorf"]');
+            const heimatdorf = ele.options[ele.selectedIndex].value;
+            document.getElementById('Landinformationen').innerHTML = "Hier findest du alles zu " + heimatdorf + "gakure <a href=https://wiki.narutorpg.de/index.php?title=" + heimatdorf + "gakure>Link</a>";
+        }
+
+        //Dieses Skript stammt von Michael Mailer´s JavaScripts
+        //URL: http://www.webaid.de/js  --  eMail: mm@webaid.de
+        //Bitte   entfernen   Sie   diesen   Vermerk   nicht  !
+        function mogo() {
+            document.FORMULAR.Punkte.value = 30;
+            if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Ningyosenshu Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 25
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Mokuton Bluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 25
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Spinnenbluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Kaguya Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Aburame Familie") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 25
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Souma no Kou") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 25
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Akimichi Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Hyuuga Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Uchiha Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Fischmenschen") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Inuzuka Familie") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Nara Familie") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 15
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Yamanaka Familie") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Hyouton Bluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Ranton Bluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Futton Bluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Youton Bluterbe") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Deidara Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Jinchuriki Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value == "Uzumaki Clan") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            }
+
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sAusdauer") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -15
+            }
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sChakra") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -15
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "nTaijutsu") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -0
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sTaijutsu") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -10
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sGenjutsu") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -10
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sNinjutsu") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -10
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sChakrakontrolle") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -20
+            } else if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sKorper") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -20
+            }
+
+            if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Genie") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Staerke") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Sandkontrolle") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 30
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Verteidigung") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Geschwindigkeit") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Ausdauernd") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Chakra") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 20
+            } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Chakrakontrolle") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            }
+
+            if (document.FORMULAR.IQ.options[document.FORMULAR.IQ.selectedIndex].value == "75") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - -10
+            } else if (document.FORMULAR.IQ.options[document.FORMULAR.IQ.selectedIndex].value == "100") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 0
+            } else if (document.FORMULAR.IQ.options[document.FORMULAR.IQ.selectedIndex].value == "125") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 10
+            } else if (document.FORMULAR.IQ.options[document.FORMULAR.IQ.selectedIndex].value == "150") {
+                document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 15
+            }
+
+            if (document.FORMULAR.IQ.options[document.FORMULAR.IQ.selectedIndex].value != "100") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Genie") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+            if (document.FORMULAR.Bluterbe.options[document.FORMULAR.Bluterbe.selectedIndex].value != "") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Sandkontrolle") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sKorper") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Staerke") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Verteidigung") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                } else if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Geschwindigkeit") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "nTaijutsu") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Chakrakontrolle") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sChakrakontrolle") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Chakrakontrolle") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sAusdauer") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Ausdauernd") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+
+            if (document.FORMULAR.Nachteil.options[document.FORMULAR.Nachteil.selectedIndex].value == "sChakra") {
+                if (document.FORMULAR.Vorteile.options[document.FORMULAR.Vorteile.selectedIndex].value == "Chakra") {
+                    document.FORMULAR.Punkte.value = document.FORMULAR.Punkte.value - 999
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Charaktererstellung</h1>
+    <p class="lead">Erstelle dir hier deinen Character. Fülle dafür alle Felder aus.</p>
+    <p><a href="https://wiki.narutorpg.de/index.php?title=Charaktererstellung" target="_blank">Informationen zur Charaktererstellung</a></p>
+
+    {% if error is defined and error == "invalid_name" %}
+        <div class="alert alert-danger" role="alert">
+            Der Name deines Ninja ist ungültig! Folgende Dinge könnten das Problem sein:
+            <ol>
+                <li>Der gewählte Name ist bereits gewählt</li>
+                <li>Du benutzt nicht zugelassene Zeichen im Vornamen. Zugelassen sind alle Buchstaben von a/A bis z/Z, Leerzeichen und -</li>
+                <li>Du benutzt einen Ninjanamen aus Naruto. Dies ist nicht erlaubt!</li>
+            </ol>
+        </div>
+    {% endif %}
+
+    <form method="post" name="FORMULAR" action="{{ path('app.legacy.charamach') }}" id="character_sheet">
+        <fieldset>
+            <legend>Accountdaten</legend>
+            <label>Vorname: <input type='text' name='Vorname' size='20'></label>
+            <label>Nachname: <input type='text' name='Nachname' size='20'></label>
+        </fieldset>
+        <table class="table">
+            <tr>
+                <td colspan="4"><b>Charakterdaten</b></td>
+            </tr>
+            <tr>
+                <td>Alter:</td>
+                <td>
+                    <select name="Alterkramninja">
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                        <option>16</option>
+                        <option>17</option>
+                        <option>18</option>
+                        <option>19</option>
+                        <option>20</option>
+                    </select>
+                    Jahre
+                </td>
+                <td>Geschlecht:</td>
+                <td>
+                    <select size='1' name='Geschlecht'>
+                        <option>Männlich</option>
+                        <option>Weiblich</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Chakrafarbe:</td>
+                <td>
+                    <select size='1' name='Chakrafarbe'>
+                        <option>Schwarz</option>
+                        <option>Weiß</option>
+                        <option>Gelb</option>
+                        <option>Rot</option>
+                        <option>Grün</option>
+                        <option selected>Blau</option>
+                        <option>Violett</option>
+                        <option>Orange</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Heimatdorf (Welche Dörfer du auswählen kannst und wieviele Start-TP du bekommst, ist abhängig von deinem Niveau):
+                </td>
+                <td>
+                    <select size="1" name="Heimatdorf" onchange="Dorfinfos()">
+                        {% for village in villages %}
+                            <option value="{{ village.value }}">{{ village.label }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='4' id='Landinformationen'>
+                    <script>Dorfinfos();</script>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Fähigkeiten:</b></td>
+                <td colspan="3"><b>Es sind noch <input type='text' readonly name='Punkte' value='30' size='3'> Punkte verfügbar</b></td>
+            </tr>
+            <tr>
+                <td><a href='https://wiki.narutorpg.de/index.php?title=Clans_und_Bluterben' target="_blank">Clan/Familie</a></td>
+                <td colspan='3'>
+                    <select size='1' name='Bluterbe' onchange='mogo()'>
+                        <option value=''>Keins</option>
+                        <option value='Mokuton Bluterbe'>Mokuton Bluterbe (-25 Punkte)</option>
+                        <option value='Ningyosenshu Clan'>Ningyosenshu Clan (-25 Punkte)</option>
+                        <option value='Spinnenbluterbe'>Spinnenbluterbe (-30 Punkte)</option>
+                        <option value='Kaguya Clan'>Kaguya Clan (-30 Punkte)</option>
+                        <option value='Aburame Familie'>Aburame Familie(-25 Punkte)</option>
+                        <option value='Souma no Kou'>Souma no Kou(-25 Punkte)</option>
+                        <option value='Akimichi Clan'>Akimichi Clan(-20 Punkte)</option>
+                        <option value='Hyuuga Clan'>Hyuuga Clan(-30 Punkte)</option>
+                        <option value='Uchiha Clan'>Uchiha Clan(-30 Punkte)</option>
+                        <option value='Fischmenschen'>Fischmenschen(-10 Punkte)</option>
+                        <option value='Inuzuka Familie'>Inuzuka Familie(-20 Punkte)</option>
+                        <option value='Nara Familie'>Nara Familie(-15 Punkte)</option>
+                        <option value='Yamanaka Familie'>Yamanaka Familie(-10 Punkte)</option>
+                        <option value='Hyouton Bluterbe'>Hyouton Bluterbe(-20 Punkte)</option>
+                        <option value='Futton Bluterbe'>Futton Bluterbe(-20 Punkte)</option>
+                        <option value='Ranton Bluterbe'>Ranton Bluterbe(-20 Punkte)</option>
+                        <option value='Youton Bluterbe'>Youton Bluterbe(-20 Punkte)</option>
+                        <option value='Deidara Clan'>Deidara Clan(-10 Punkte)</option>
+                        <option value='Jinchuriki Clan'>Jinchuriki Clan(-30 Punkte)</option>
+                        <option value='Uzumaki Clan'>Uzumaki Clan(-30 Punkte)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><a href='https://wiki.narutorpg.de/index.php?title=Nachteile' target="_blank">Nachteil</a></td>
+                <td>
+                    <select size='1' name='Nachteil' onchange='mogo()'>
+                        <option selected>Keiner</option>
+                        <option value='sAusdauer'>Schlechte Ausdauer (+15 Punkte)</option>
+                        <option value='sChakra'>Schwaches Chakra (+15 Punkte)</option>
+                        <option value='nTaijutsu'>Nur Taijutsu (+0 Punkte)</option>
+                        <option value='sTaijutsu'>Schlecht in Taijutsu (+10 Punkte)</option>
+                        <option value='sGenjutsu'>Schlecht in Genjutsu (+10 Punkte)</option>
+                        <option value='sNinjutsu'>Schlecht in Ninjutsu (+10 Punkte)</option>
+                        <option value='sChakrakontrolle'>Schlechte Chakrakontrolle (+20 Punkte)</option>
+                        <option value='sKorper'>Schwacher Körper (+20 Punkte)</option>
+                    </select>
+                </td>
+                <td><a href='https://wiki.narutorpg.de/index.php?title=Vorteile' target="_blank">Vorteil</a></td>
+                <td>
+                    <select name='Vorteile' onchange='mogo()'>
+                        <option value='Keiner' selected>Keiner</option>
+                        <option value='Genie'>Genie (-30 Punkte)</option>
+                        <option value='Sandkontrolle'>Sandkontrolle (-30 Punkte)</option>
+                        <option value='Staerke'>Herausragende St&auml;rke(-10 Punkte)</option>
+                        <option value='Verteidigung'>Herausragende Vert.(-10 Punkte)</option>
+                        <option value='Geschwindigkeit'>Herausragende Geschw.(-10 Punkte)</option>
+                        <option value='Ausdauernd'>Ausdauernd(-20 Punkte)</option>
+                        <option value='Chakra'>Enormes Chakra(-20 Punkte)</option>
+                        <option value='Chakrakontrolle'>Sehr gute Chakrakontrolle(-10 Punkte)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Lernfähigkeit</td>
+                <td colspan='3'>
+                    <select name='IQ' onchange='mogo()'>
+                        <option value='75'>75% (+10 Punkte)</option>
+                        <option value='100' selected>Normal (100%) (0 Punkte)</option>
+                        <option value='125'>125% (-10 Punkte)</option>
+                        <option value='150'>150% (-15 Punkte)</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <button type="submit" class="btn btn-success">Anmelden</button>
+        </p>
+    </form>
+
+{% endblock %}

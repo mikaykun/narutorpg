@@ -4,8 +4,8 @@ final class tpKosten
 {
     private array $jutsuTPKosten;
     private array $sumUnder;
-    private $jutsuOk;
-    private $okMax;
+    private array $jutsuOk = [];
+    private array $okMax = [];
     private $noS;
     private int $sStuff = 0;
     private readonly PDO $pdo;
@@ -224,7 +224,7 @@ final class tpKosten
     //ausgabefunktion von welche stufen ok einfügen
 
     ///dis nch vernünftig machen + überall die verknüpfungen (muss rein ob spezifische Jutsu ok)
-    public function thisJutsuOk($jutsu, $user, $seal)
+    public function thisJutsuOk(object $jutsu, $user, $seal): bool
     {
         //Element, Siegel prüfen, Clan
         $sealNeeded = [2 => 1, 4 => 1, 6 => 2, 8 => 3, 10 => 4];
@@ -245,7 +245,7 @@ final class tpKosten
         return true;
     }
 
-    public function getOkMax()
+    public function getOkMax(): array
     {
         return $this->okMax;
     }
@@ -268,7 +268,11 @@ final class tpKosten
     public function thisIsOkMax(array $u_Jutsu, object $user): void
     {
         $this->jutsuTPOk($u_Jutsu, $user);
-        $this->okMax = [];
+        $this->okMax = [
+            'Genjutsu' => 0,
+            'Taijutsu' => 0,
+            'Ninjutsu' => 0,
+        ];
         foreach ($this->jutsuOk as $ele => $steps) {
             $stepMax = 0;
             foreach ($steps as $step => $ok) {

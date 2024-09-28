@@ -416,55 +416,55 @@ else
                 </tr>";
             }
 
-            $multis= array();
-            $sql   = "SELECT `user`.`name` AS `multName`,`userdaten`.`multFrei` as `multFreig` FROM `multi` LEFT JOIN `user` ON `multi`.`uId2` = `user`.`id` LEFT JOIN `userdaten` ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId1` = '$dorfs->id' && (`multOk` = '0' OR `multOk` = '2') && `Counter` > '0'";
-            $query = mysql_query($sql);
-            while ($NPC = mysql_fetch_object($query)) {
-                $multis[] = $NPC->multName;
-                $multfrei[$NPC->multName] = $NPC->multFreig;
-            }
-            $query2 = mysql_query("SELECT u.name AS multName, ud.multFrei AS multFreig FROM multi m LEFT JOIN user u ON m.uId1 = u.id LEFT JOIN userdaten ud ON m.uId2 = ud.id WHERE uId2 = '{$dorfs->id}' && (multOk = '0' OR multOk = '2') && Counter > 0");
-            while ($NPC2 = mysql_fetch_object($query2)) {
-                $multis[] = $NPC->multName;
-                $multfrei[$NPC->multName] = $NPC->multFreig;
-            }
-            $multis=array_unique($multis);
-            if(count($multis)){
-                    echo "<tr><td><b>Nicht genehmigter Multi mit: </b></td><td>";
-                foreach($multis as $multName){
-                    echo "<a href='userpopup.php?usernam=$multName'>$multName</a> ";
-                    if($multfrei[$multName] == 1)
-                    {
-                        echo '(Anfragen/EEfreigabe)';
-                    }
+        $multis = [];
+        $multfrei = [];
+        $sql = "SELECT `user`.`name` AS `multName`,`userdaten`.`multFrei` as `multFreig` FROM `multi` LEFT JOIN `user` ON `multi`.`uId2` = `user`.`id` LEFT JOIN `userdaten` ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId1` = '$dorfs->id' && (`multOk` = '0' OR `multOk` = '2') && `Counter` > '0'";
+        $query = mysql_query($sql);
+        while ($NPC = mysql_fetch_object($query)) {
+            $multis[] = $NPC->multName;
+            $multfrei[$NPC->multName] = $NPC->multFreig;
+        }
+        $query2 = mysql_query("SELECT u.name AS multName, ud.multFrei AS multFreig FROM multi m LEFT JOIN user u ON m.uId1 = u.id LEFT JOIN userdaten ud ON m.uId2 = ud.id WHERE uId2 = '{$dorfs->id}' && (multOk = '0' OR multOk = '2') && Counter > 0");
+        while ($NPC2 = mysql_fetch_object($query2)) {
+            $multis[] = $NPC2->multName;
+            $multfrei[$NPC2->multName] = $NPC2->multFreig;
+        }
+        $multis = array_unique($multis);
+        if (count($multis)) {
+            echo "<tr><td><b>Nicht genehmigter Multi mit: </b></td><td>";
+            foreach ($multis as $multName) {
+                echo "<a href='userpopup.php?usernam=$multName'>$multName</a> ";
+                if ($multfrei[$multName] == 1) {
+                    echo '(Anfragen/EEfreigabe)';
                 }
-                echo "</td></tr>";
             }
-            $multis= array();
-            $sql   = "SELECT `user`.`name` AS `multName`,`userdaten`.`multFrei` as `multFreig` FROM `multi` LEFT JOIN `user` ON `multi`.`uId2` = `user`.`id` LEFT JOIN `userdaten` ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId1` = '$dorfs->id' && `multOk` = '1' && `Counter` > '0'";
-            $query = mysql_query($sql);
-            while ($NPC = mysql_fetch_object($query)) {
-                $multis[] = $NPC->multName;
-                $multfrei[$NPC->multName] = $NPC->multFreig;
+            echo "</td></tr>";
+        }
+        $multis = [];
+        $multfrei = [];
+        $sql = "SELECT `user`.`name` AS `multName`,`userdaten`.`multFrei` as `multFreig` FROM `multi` LEFT JOIN `user` ON `multi`.`uId2` = `user`.`id` LEFT JOIN `userdaten` ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId1` = '$dorfs->id' && `multOk` = '1' && `Counter` > '0'";
+        $query = mysql_query($sql);
+        while ($NPC = mysql_fetch_object($query)) {
+            $multis[] = $NPC->multName;
+            $multfrei[$NPC->multName] = $NPC->multFreig;
+        }
+        $sql2 = "SELECT u.name AS multName, userdaten.multFrei AS multFreig FROM multi LEFT JOIN user u ON `multi`.`uId1` = u.`id` LEFT JOIN userdaten ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId2` = '$dorfs->id' && `multOk` = '1' && `Counter` > '0'";
+        $query2 = mysql_query($sql2);
+        while ($NPC2 = mysql_fetch_object($query2)) {
+            $multis[] = $NPC2->multName;
+            $multfrei[$NPC2->multName] = $NPC2->multFreig;
+        }
+        $multis = array_unique($multis);
+        if (count($multis)) {
+            echo "<tr><td><b>Genehmigter Multi mit: </b></td><td>";
+            foreach ($multis as $multName) {
+                echo "<a href='userpopup.php?usernam=$multName'>$multName</a> ";
             }
-            $sql2 = "SELECT u.name AS multName, userdaten.multFrei AS multFreig FROM multi LEFT JOIN user u ON `multi`.`uId1` = u.`id` LEFT JOIN userdaten ON `multi`.`uId2` = `userdaten`.`id` WHERE `uId2` = '$dorfs->id' && `multOk` = '1' && `Counter` > '0'";
-            $query2 = mysql_query($sql2);
-            while ($NPC2 = mysql_fetch_object($query2)) {
-                $multis[] = $NPC->multName;
-                $multfrei[$NPC->multName] = $NPC->multFreig;
-            }
-            $multis=array_unique($multis);
-            if(count($multis)){
-                    echo "<tr><td><b>Genehmigter Multi mit: </b></td><td>";
-                foreach($multis as $multName){
-                    echo "<a href='userpopup.php?usernam=$multName'>$multName</a> ";
-                }
-                echo "</td></tr>";
-            }
+            echo "</td></tr>";
+        }
 
-            echo "</table>";
-            echo '* Abweichungen durch nicht vom System erfasste EEs m&ouml;glich';
-
+        echo "</table>";
+        echo '* Abweichungen durch nicht vom System erfasste EEs m&ouml;glich';
 
         if ($dorfs2->Team > 0) {
             $query = mysql_query("SELECT id, Name FROM Teams WHERE id = '$dorfs2->Team'");
